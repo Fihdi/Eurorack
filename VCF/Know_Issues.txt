@@ -1,0 +1,3 @@
+No idea because I have not built this module in real life, only on computer.
+
+The VCF on the picture is the same schematic, based on Skull and Circuits' VCF-3, but the PCB was made with EAGLE, which I no longer use.
