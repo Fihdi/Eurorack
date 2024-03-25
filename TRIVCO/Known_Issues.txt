@@ -1,0 +1,7 @@
+see "General_Issues"
+
+-No trimpots for 1V/Oct tracking
+
+-Triangle signal after the buffer is shifted up/down by the schmitt trigger for synchronisation -> comparator compares this signal to ground -> duty cylce is not 50% at default.
+
+-LED is mostly usless excpet when using the module as an LFO.
