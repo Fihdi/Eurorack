@@ -1,0 +1,13 @@
+-Custom power connector instead of the standard 10-pin IDC connector
+
+-No grounding on the jacks sleeves.
+
+-Missing bypass capacitors on almost every IC
+
+-Potentiometer Orientation
+
+-Potentiometer ranges
+
+-No values on the schematics
+
+-No "JLC" Label, when ordering through JLCPCB, the ordering number is printed on a random location and so it might be visible and ugly.
