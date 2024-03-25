@@ -1,0 +1,7 @@
+see "General_Issues"
+
+Forgot the Power Connections to the TL074
+
+No LED!
+
+No attenuator for CV
