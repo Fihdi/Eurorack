@@ -1,0 +1,8 @@
+-Reset Input does not work
+
+-Gate Output should be implemented more "nicely" with a proper AND gate or a MOSFET acting as an AND gate. The method with the diode only seems to work when I put a 100k resistor in parallel to it (????)
+
+-CLK input should be buffered, sometimes it does not trigger with weak gates or from an oscillator.
+
+Features I wish I added:
+Use a Microcontroller and the CD4028 IC to have forward, backwards, forw. and backwards mode, random mode, etc.
