@@ -1,3 +1,5 @@
+ToDo: Making a PDF of every schematic. Adding finished Gerber files.  
+
 -Custom power connector instead of the standard 10-pin IDC connector
 
 -No grounding on the jacks sleeves.
