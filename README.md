@@ -1,4 +1,4 @@
-# Eurorack
+# Open Source Eurorack Synthesizer
 
 Schematics and PCBs for my Eurorack modules
 
