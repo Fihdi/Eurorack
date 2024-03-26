@@ -1,0 +1,9 @@
+Voltage controlled Slew and Attack/Release Envelope Generator
+
+Removing D4 so that a positive voltage is not trapped between D4 and C1, BUT! Loop mode still only works by connecting EOC to IN and I don't know why.
+
+COMP1 and COMP2 should be done with summing amplifiers for the full range.
+
+Diode on the input for positive voltages only BUT that results in many Voltage drops accross the input, the Attack VCR, the base-emitter path of Q3. -> Shottky Diodes
+
+Positive voltages only! Replace the CD4066 for a DG411 or similar for negative voltages as well.
