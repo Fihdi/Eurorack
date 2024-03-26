@@ -1,0 +1,10 @@
+MISSING POWER and POWER ROUTED WRONG
+
+Inverse VCO:
+-No input hysteresis
+
+Slew Rate Limiter:
+-I don't know why but it does not slew when I built it, or at the very least it does not slew very noticably. Maybe just a bigger cap is needed.
+
+Attenuverter:
+-No issues but some LEDs would be nice, same for the analog XOR
