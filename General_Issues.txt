@@ -1,4 +1,4 @@
-ToDo: Making a PDF of every schematic. Adding finished Gerber files.  
+ToDo: Making a PDF of every schematic. Adding finished Gerber files. Add the text "OpenSource Module by Fihdi" to every module somewhere. 
 
 -Custom power connector instead of the standard 10-pin IDC connector
 
