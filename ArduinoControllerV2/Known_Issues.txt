@@ -1,1 +1,3 @@
 I cannot find the project for the Front panel PCB lmao
+
+I used multiple TL072s instead of TL074 because that's what I got on hand at the time I designed this module.
