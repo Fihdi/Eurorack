@@ -1,5 +1,7 @@
 Voltage controlled Slew and Attack/Release Envelope Generator
 
+NEW IMPROVED VERSION IN THE "VCAR" SUB FOLDER! 
+
 Removing D4 so that a positive voltage is not trapped between D4 and C1, BUT! Loop mode still only works by connecting EOC to IN and I don't know why.
 
 COMP1 and COMP2 should be done with summing amplifiers for the full range.
