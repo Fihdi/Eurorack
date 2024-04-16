@@ -1,9 +1,0 @@
-"SUS" Input does not work.
-
-No seperate controls for Decay and Release
-
-No Voltage Control
-
-Attack phase gets aborted when input gate goes low.
-
-The improved version of VCAR fixes most of these problems.
