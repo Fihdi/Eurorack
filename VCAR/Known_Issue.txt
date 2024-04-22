@@ -1,0 +1,5 @@
+Voltage controlled Attack/Release Module. Can be used as a VCO, LFO, Envelope Generator, Waveshaper, Gate Delay, Rythm Generator and a million other things.
+
+Finally got this one working after 3 Revisions....
+
+Schematic inspired by the legendary Dual Universal Slope Generator by Serge Tcherepnin, and later on Make Noise Maths, Befaco Rampage, Kassutronics Slope, etc.
