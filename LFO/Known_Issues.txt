@@ -1,3 +1,5 @@
 No attenuator for CV
 
 MORE LEDS!
+
+Very Basic Design, will probably come up with something of my own later.
