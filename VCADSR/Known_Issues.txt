@@ -1,0 +1,5 @@
+Voltage Controlled ADSR (Attack Decay Sustain Release) Envelope Generator
+
+An Original idea, current mirrors are acting as VCRs.
+
+No known issues because I have not built this circuit IRL yet.
