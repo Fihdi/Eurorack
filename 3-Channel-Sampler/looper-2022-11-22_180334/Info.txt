@@ -1,3 +1,5 @@
+3 Channel Sampler that pairs well with the A, B and C outputs of my sequencer
+
 The solder points for the buttons are too close to the hole.
 When the push button is stuck through the PCB and tightend with a washer, the washer will make contact with both solder points and the button is effectively always pressed.
 
