@@ -1,0 +1,7 @@
+No idea if the current project works because I have not built this module in real life, only on computer.
+
+This is a voltage controlled two-pole filter with low-, band- and highpass modes. OTA design based on Skull and Circuits VCF-3. 
+
+The VCF on the picture is the same schematic, but the PCB was made with EAGLE, which I no longer use.
+
+https://www.skullandcircuits.com/vcf-3/?v=d3dcf429c679
