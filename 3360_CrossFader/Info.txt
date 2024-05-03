@@ -1,0 +1,3 @@
+Crossfader that can fade between two audio or CV signals. Two VCA cores that can be used together (Crossfader mode) or seperately.
+
+No Major issues, just the assembly between the front- and the backboard is rather tight.
