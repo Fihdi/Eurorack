@@ -1,1 +1,0 @@
-This is V2 of my sequencer and I have not built this module in real life yet.

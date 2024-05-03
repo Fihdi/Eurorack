@@ -1,0 +1,3 @@
+This is V2 of my sequencer and I have not built this module in real life yet.
+
+Pulse / Trigger Outputs A, B and C have been made for the Sampler Module, but they can be used to trigger anything (Envelopes, Sample and Hold, etc)
