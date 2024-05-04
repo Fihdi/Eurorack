@@ -62,7 +62,7 @@ void loop() {
    // base = 4*pow(2.0,(double)((-1/2)*(pow(analogRead(Bin)/200)-4,2)));
   //  frequency = 61.735*pow(base, analogRead(Ain)/100);
   }else{
-    frequency = 61.735*pow(2, (double)analogRead(Ain)/70); //Weltforme
+    frequency = 61.735*pow(2, (double)analogRead(Ain)/70); 
   }
   
   tone(Aaud, (int)frequency/8);
