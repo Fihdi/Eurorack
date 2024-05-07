@@ -1,4 +1,4 @@
-No attenuator for CV
+No attenuator for CV. No Reset or Sync input. No inverted Square output.
 
 MORE LEDS!
 
