@@ -4,7 +4,7 @@ Circuit based on Rene Schmitz, they made it possible to switch positive and nega
 
 The working principle is: The analog switches, when closed, act as a short circuits inbetween the two resistors of an inverting amplifier opamp circuit,
 which sits at 0V since the non-inverting input is connected to ground. Because there is close to 0V across a short circuit and one end of the switch is always connected to 0V, 
-there will be a total of 0V across the switch when it is closed, but still relays the current to complete the non-inverting amplifier.
+there will be a total of 0V across the switch when it is closed, but still relays the current in both directions to complete the non-inverting amplifier.
 
 When the switch is open, two diodes clamp the voltage from going above approx. +/- 400mV which the CD4066 can handle. 
 
