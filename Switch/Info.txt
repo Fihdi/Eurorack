@@ -1,5 +1,7 @@
 Two Voltage Controlled Switches with analog logic outputs. 
 
+Issue: The comparators for A>B and B>A should compare the inputs before the switches, not after.
+
 Circuit based on Rene Schmitz, they made it possible to switch positive and negative Voltages through a CD4066 chip, which should only operate at 0V to Vcc.
 
 The working principle is: The analog switches, when closed, act as a short circuits inbetween the two resistors of an inverting amplifier opamp circuit,
