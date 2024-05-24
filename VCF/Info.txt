@@ -1,3 +1,0 @@
-2-pole Voltage controlled Filter.
-
-The labels "CV" and "IN" are wrong and should be swapped.
