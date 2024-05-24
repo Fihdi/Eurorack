@@ -1,3 +1,5 @@
+![LFO](https://raw.githubusercontent.com/Fihdi/Eurorack/main/LFO/LFO-Front.png)
+
 No attenuator for CV. No Reset or Sync input. No inverted Square output.
 
 MORE LEDS!
