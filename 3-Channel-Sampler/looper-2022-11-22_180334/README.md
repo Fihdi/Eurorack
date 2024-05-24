@@ -1,3 +1,5 @@
+![Sampler](https://raw.githubusercontent.com/Fihdi/Eurorack/main/3-Channel-Sampler/looper-2022-11-22_180334/Sampler-Front.png)
+
 3 Channel Sampler that pairs well with the A, B and C outputs of my sequencer
 
 The solder points for the buttons are too close to the hole.
