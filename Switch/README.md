@@ -1,3 +1,5 @@
+![Switch](https://raw.githubusercontent.com/Fihdi/Eurorack/main/Switch/Switch-Front.png)
+
 Two Voltage Controlled Switches with analog logic outputs. 
 
 Issue: The comparators for A>B and B>A should compare the inputs before the switches, not after.
