@@ -1,3 +1,5 @@
-No Output Resistors.
+![Clockdivider](https://raw.githubusercontent.com/Fihdi/Eurorack/main/Clockdivider/Clockdivider-Front.png)
 
-Could use a few more stages but not really neccessary for me.
+CD4040 based Clockdivider with 4 stages and Reset input.
+
+No Output Resistors.
