@@ -1,3 +1,5 @@
+![SAH-TAH](https://raw.githubusercontent.com/Fihdi/Eurorack/main/SAH-TAH/SAH-TAH-Front.png)
+
 Sample and Hold/ Track and Hold module and white Noise
 
 Missing Base resistor for Q4
