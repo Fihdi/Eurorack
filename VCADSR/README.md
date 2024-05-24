@@ -1,6 +1,8 @@
+![VCADSR](https://raw.githubusercontent.com/Fihdi/Eurorack/main/VCADSR/VCADSR-Front.png)
+
 Voltage controlled Attack Decay Sustain Release Module.
 
-Manual Trigger, Loop and x10 Switch. Rates for ADR and the level for Sustain can be controlled manually or by CV with onboard attenuaters
+Manual Trigger, Loop and x4 Switch. Rates for ADR and the level for Sustain can be controlled manually or by CV with onboard attenuaters
 Tested this on breadboard and it works nicely.
 
 Basic schematic inspired by Rene Schmitz. An RS flipflop and analog switches control the charge and discharge paths for the capacitor.
@@ -14,3 +16,5 @@ The PNP transistor before the decay current mirror cuts off the current flow whe
 Once the input gate dissapears the current mirror for the release phase discharges the capacitor until 0V.
 
 MOSFETS are used as AND gates to extract the phases of the circuit and indicated with LEDs 
+
+https://www.schmitzbits.de/adsr.html
