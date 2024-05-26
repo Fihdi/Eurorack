@@ -1,4 +1,6 @@
-ToDo: Making a PDF of every schematic. Adding finished Gerber files. Add the text "OpenSource Module by Fihdi" to every module somewhere. 
+ToDo: Making a PDF of every schematic. Adding finished Gerber files. Add the text "OpenSource Module by Fihdi" to every module somewhere.
+
+-Module widths are not up to norm, meaning, when putting modules side by side the mounting holes may not exactly line up on a rails with 5.08mm spacing.
 
 -Custom power connector instead of the standard 10-pin IDC connector
 
