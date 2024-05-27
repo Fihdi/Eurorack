@@ -1,6 +1,7 @@
 MISSING POWER and POWER ROUTED WRONG
 
-Inverse VCO:
+Inverse VCO: Turns a frequency into a voltage
+
 -No input hysteresis
 
 Slew Rate Limiter:
