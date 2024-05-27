@@ -1,4 +1,6 @@
-Voltage controlled Attack/Release Module.
+![](https://raw.githubusercontent.com/Fihdi/Eurorack/main/VCAR/VCAR-Front.png)
+
+Voltage controlled SLEW Rate limiter / Attack/Release Module.
 
 Can be used as an Envelope Generator, Slew Rate Limiter, VCO, LFO, Waveshaper, Gate Delay, Rythm Generator and a million other things.
 
