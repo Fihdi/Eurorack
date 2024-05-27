@@ -15,6 +15,8 @@ The PNP transistor before the decay current mirror cuts off the current flow whe
 
 Once the input gate dissapears the current mirror for the release phase discharges the capacitor until 0V.
 
-MOSFETS are used as AND gates to extract the phases of the circuit and indicated with LEDs 
+MOSFETS are used as AND gates to extract the phases of the circuit and indicated with LEDs.
+
+The PCB is the only 4 layer PCB of my modules because the circuit is quiet big (or I am just terrible at routing), either way I would preferr the board(s) to be 2 layer and THT-only.
 
 https://www.schmitzbits.de/adsr.html
