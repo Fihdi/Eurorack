@@ -1,3 +1,5 @@
+![](https://raw.githubusercontent.com/Fihdi/Eurorack/main/ArduinoControllerV2/ArduinoController-Front.png)
+
 Versatile module that can be programmed to output 3 CV/Gate or sound signals.
 
 No USB Interface from the front.
