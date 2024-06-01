@@ -1,70 +1,113 @@
-//Example code, not correct yet.
+//Code by Fihdi 1st July 2024
 
-const int outputPins[] = {2, 3, 4, 5, 6, 7, 8, 9}; // Define the output pins
-const int CLKtriggerPin = 11; // Pin to detect rising edge
-const int DIRPin = 13;
-const int RSTtriggerPin = 10; // Pin to detect rising edge
-const int STOPPin = 12;
+const int outputPins[] = { 9, 10, 7, 5, 6, 23, 24, 8};  // Define the output pins //A0 is pin 23 //A1 is pin 24
+const int CLKtriggerPin = 0;                           // Pin to detect rising edge
+const int DIRPin = 4;
+const int RSTtriggerPin = 12;  // Pin to detect rising edge
+const int STOPPin = 1;
+const int pushButtonPin = 17;
 
-volatile bool CLKtriggered = false; // Flag to indicate trigger
-volatile bool RSTtriggered = false; // Flag to indicate trigger
+volatile bool CLKTriggerInterrupted = false;  // Flag to indicate trigger
+volatile bool RSTtriggerInterrupted = false;
+volatile bool CLKtriggered = false;
+volatile bool RSTtriggered = false;  // Flag to indicate trigger
 
-byte sequence[] = {0b00000001, 0b00000010, 0b00000100, 0b00001000, // Example sequence, replace with your own
-                   0b00010000, 0b00100000, 0b01000000, 0b10000000};
-int step = 0; // Step counter
+byte sequence[] = { 0b00000001, 0b00000010, 0b00000100, 0b00001000,  // Example sequence, replace with your own
+                    0b00010000, 0b00100000, 0b01000000, 0b10000000 };
+int step = 0;  // Step counter
 
 void setup() {
   for (int i = 0; i < 8; i++) {
-    pinMode(outputPins[i], OUTPUT); // Set output pins as OUTPUT
+    pinMode(outputPins[i], OUTPUT);  // Set output pins as OUTPUT
   }
 
   pinMode(STOPPin, INPUT);
   pinMode(DIRPin, INPUT);
-  pinMode(CLKtriggerPin, INPUT_PULLUP); // Set trigger pin as INPUT with internal pull-up resistor
-  pinMode(RSTtriggerPin, INPUT_PULLUP); // Set trigger pin as INPUT with internal pull-up resistor
-  
-  
-  attachInterrupt(digitalPinToInterrupt(CLKtriggerPin), CLKtriggerStep, RISING); // Attach interrupt for rising edge 
-  attachInterrupt(digitalPinToInterrupt(RSTtriggerPin), RSTtriggerStep, RISING); // Attach interrupt for rising edge
-  
+  pinMode(CLKtriggerPin, INPUT);
+  pinMode(RSTtriggerPin, INPUT);    
 }
 
 void loop() {
 
-    if(analogRead(STOPPin)<10){
-      
+if(digitalRead(STOPPin)!=HIGH){
+  CLKtriggered = (digitalRead(CLKtriggerPin) == HIGH || digitalRead(pushButtonPin) == HIGH ) && (CLKTriggerInterrupted == false);
+  
   if (CLKtriggered) {
-    writeToOutputs(sequence[step]);// Get the byte data for the current step
-    
-    if(digitalRead(DIRPin)==LOW){
-    step = (step + 1) % 8; 
-    }else{
-    step = (step - 1) % 8;   
+    //CLK Triggered
+    CLKTriggerInterrupted = true;
+    writeToOutputs(sequence[step]);  // Get the byte data for the current step
+
+    if (digitalRead(DIRPin) == 0) {
+      step = (step + 1) % 8;
+    } else {
+      step = (step - 1 + 8) % 8;
     }
-    CLKtriggered = false; // Reset trigger flag
   }
 
-if (RSTtriggered) {
-  step = 0;
-    writeToOutputs(sequence[step]);// Get the byte data for the current step
-    RSTtriggered = false; // Reset trigger flag
+if((digitalRead(CLKtriggerPin) == LOW || digitalRead(pushButtonPin) == LOW )&& (CLKTriggerInterrupted == true)){
+CLKTriggerInterrupted = false; 
+}
+  RSTtriggered = (digitalRead(RSTtriggerPin) == HIGH) && (RSTtriggerInterrupted == false);
+
+  if (RSTtriggered) {
+    RSTtriggerInterrupted=true;
+    step = 0;
+    writeToOutputs(sequence[step]);  // Get the byte data for the current step
   }
+
+if((digitalRead(RSTtriggerPin) == LOW)&& (RSTtriggerInterrupted == true)){
+RSTtriggerInterrupted = false; 
 }
+}
+}
+void writeToOutputs(byte outputByte) {
+
+if(outputByte & (1 << 0)){
+digitalWrite(outputPins[0], HIGH);
+}else{
+  digitalWrite(outputPins[0], LOW);
 }
 
-void writeToOutputs(byte outputByte){
-for (int i = 0; i < 8; i++) {
-      if (outputByte & (1 << i)) {
-        digitalWrite(outputPins[i], HIGH); // If the i-th bit is set, turn the corresponding output pin HIGH
-      } else {
-        digitalWrite(outputPins[i], LOW); // If the i-th bit is not set, turn the corresponding output pin LOW
-      }
-    }
-}
-void CLKtriggerStep() {
-  CLKtriggered = true; // Set trigger flag on rising edge
+if(outputByte & (1 << 1)){
+digitalWrite(outputPins[1], HIGH);
+}else{
+  digitalWrite(outputPins[1], LOW);
 }
 
-void RSTtriggerStep() {
-  RSTtriggered = true; // Set trigger flag on rising edge
+if(outputByte & (1 << 2)){
+digitalWrite(outputPins[2], HIGH);
+}else{
+  digitalWrite(outputPins[2], LOW);
+}
+
+if(outputByte & (1 << 3)){
+digitalWrite(outputPins[3], HIGH);
+}else{
+  digitalWrite(outputPins[3], LOW);
+}
+
+if(outputByte & (1 << 4)){
+digitalWrite(A0, HIGH);
+}else{
+  digitalWrite(A0, LOW);
+}
+
+if(outputByte & (1 << 5)){
+analogWrite(A1, 255);
+}else{
+  analogWrite(A1, 0);
+}
+
+if(outputByte & (1 << 6)){
+analogWrite(outputPins[6], 255);
+}else{
+  analogWrite(outputPins[6], 0);
+}
+
+if(outputByte & (1 << 7)){
+digitalWrite(outputPins[7], HIGH);
+}else{
+  digitalWrite(outputPins[7], LOW);
+}
+
 }
