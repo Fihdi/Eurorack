@@ -87,21 +87,21 @@ digitalWrite(outputPins[3], HIGH);
 }
 
 if(outputByte & (1 << 4)){
-digitalWrite(A0, HIGH);
+  digitalWrite(outputPins[4], HIGH);
 }else{
-  digitalWrite(A0, LOW);
+   digitalWrite(outputPins[4], LOW);
 }
 
 if(outputByte & (1 << 5)){
-analogWrite(A1, 255);
+analogWrite(A0, 255);
 }else{
-  analogWrite(A1, 0);
+  analogWrite(A0, 0);
 }
 
 if(outputByte & (1 << 6)){
-analogWrite(outputPins[6], 255);
+analogWrite(A1, 0);
 }else{
-  analogWrite(outputPins[6], 0);
+  analogWrite(A1, 0);
 }
 
 if(outputByte & (1 << 7)){
