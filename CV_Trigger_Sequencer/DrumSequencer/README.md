@@ -1,6 +1,6 @@
 ![Sequencer](https://raw.githubusercontent.com/Fihdi/Eurorack/main/CV_Trigger_Sequencer/DrumSequencer/SEQ-Front.png)
 
-This is V2 of my sequencer and I have not built this module in real life yet.
+IN1 PIN MUST NOT BE POPULATED it is connected to the RESET Pin on the ATMega328P, unfortunately this pin needs to be either left unpopulated or the trace needs to be scratched and routed to another Pin.
 
 No Rotary-Switch for the amount of steps.
 
