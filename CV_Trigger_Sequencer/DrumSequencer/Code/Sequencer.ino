@@ -99,7 +99,7 @@ analogWrite(A0, 255);
 }
 
 if(outputByte & (1 << 6)){
-analogWrite(A1, 0);
+analogWrite(A1, 255);
 }else{
   analogWrite(A1, 0);
 }
