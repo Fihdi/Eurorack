@@ -25,6 +25,7 @@ void setup() {
   pinMode(DIRPin, INPUT);
   pinMode(CLKtriggerPin, INPUT);
   pinMode(RSTtriggerPin, INPUT);    
+  pinMode(pushButtonPin, INPUT);    
 }
 
 void loop() {
