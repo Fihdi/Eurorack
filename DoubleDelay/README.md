@@ -1,10 +1,9 @@
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/main/DoubleDelay/Delay-Front.png)
 
-Simple delay module with two identical PT2399 circuits either in series or separate.
-
-Parameters for Level, Delay Time, and Feedback amount can be set with knobs.
-
+Simple delay module with two identical PT2399 circuits either in series or separate. Parameters for Level, Delay Time, and Feedback amount can be set with knobs.
 This module features no CV.
+
+UNFINISHED PROJECT, I cannot for the life of me find the finished project folder.
 
 Ideas for a new module:
 
