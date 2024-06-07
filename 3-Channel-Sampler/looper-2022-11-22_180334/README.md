@@ -4,6 +4,7 @@
 
 The solder points for the buttons are too close to the hole.
 When the push button is stuck through the PCB and tightend with a washer, the washer will make contact with both solder points and the button is effectively always pressed.
+I have put some small sheets of isolating rubber underneath the buttons to prevent this issue.
 
 The summing amplifier should have a gain of two since the ISD1820 are running on 5V and are rather quiet compared to normal eurorack levels.
 
