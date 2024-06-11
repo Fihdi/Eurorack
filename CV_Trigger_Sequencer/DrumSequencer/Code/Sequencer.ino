@@ -1,18 +1,19 @@
 //Code by Fihdi 1st July 2024
 
 const int outputPins[] = { 9, 10, 7, 5, 6, 23, 24, 8};  // Define the output pins //A0 is pin 23 //A1 is pin 24
-const int CLKtriggerPin = 0;                           // Pin to detect rising edge
-const int DIRPin = 4;
-const int RSTtriggerPin = 12;  // Pin to detect rising edge
-const int STOPPin = 1;
+const int CLKtriggerPin = 0; //Clock Input Pin, when this Pin has a rising edge, the sequencer will jump to the next step.
+const int DIRPin = 4; //Direction Pin, while this pin is HIGH, the sequencer runs in reverse
+const int RSTtriggerPin = 12;  // Reset Trigger, sets the step counter back to 0.
+const int STOPPin = 1; //Stop Pin, while this pin is HIGH, the sequencer will stop. Clock, Reset and Direction Pins will have no effects.
 const int pushButtonPin = 17;
 
-volatile bool CLKTriggerInterrupted = false;  // Flag to indicate trigger
+//Trigger flags for Rising edge detection
+volatile bool CLKTriggerInterrupted = false;
 volatile bool RSTtriggerInterrupted = false;
 volatile bool CLKtriggered = false;
-volatile bool RSTtriggered = false;  // Flag to indicate trigger
+volatile bool RSTtriggered = false; 
 
-byte sequence[] = { 0b00000001, 0b00000010, 0b00000100, 0b00001000,  // Example sequence, replace with your own
+byte sequence[] = { 0b00000001, 0b00000010, 0b00000100, 0b00001000,
                     0b00010000, 0b00100000, 0b01000000, 0b10000000 };
 int step = 0;  // Step counter
 
@@ -31,6 +32,8 @@ void setup() {
 void loop() {
 
 if(digitalRead(STOPPin)!=HIGH){
+//Only proceed as long as the STOPPin is low
+  
   CLKtriggered = (digitalRead(CLKtriggerPin) == HIGH || digitalRead(pushButtonPin) == HIGH ) && (CLKTriggerInterrupted == false);
   
   if (CLKtriggered) {
@@ -39,30 +42,35 @@ if(digitalRead(STOPPin)!=HIGH){
     writeToOutputs(sequence[step]);  // Get the byte data for the current step
 
     if (digitalRead(DIRPin) == 0) {
+      //Increment step if the direction Pin is LOW
       step = (step + 1) % 8;
     } else {
+      //Decrement step if the direction Pin is HIGH
       step = (step - 1 + 8) % 8;
     }
   }
 
 if((digitalRead(CLKtriggerPin) == LOW || digitalRead(pushButtonPin) == LOW )&& (CLKTriggerInterrupted == true)){
-CLKTriggerInterrupted = false; 
+CLKTriggerInterrupted = false; //Reset trigger flag 
 }
+  
   RSTtriggered = (digitalRead(RSTtriggerPin) == HIGH) && (RSTtriggerInterrupted == false);
 
   if (RSTtriggered) {
+    //Resetted
     RSTtriggerInterrupted=true;
     step = 0;
     writeToOutputs(sequence[step]);  // Get the byte data for the current step
   }
 
 if((digitalRead(RSTtriggerPin) == LOW)&& (RSTtriggerInterrupted == true)){
-RSTtriggerInterrupted = false; 
+RSTtriggerInterrupted = false; //Reset trigger flag 
 }
 }
 }
-void writeToOutputs(byte outputByte) {
 
+void writeToOutputs(byte outputByte) {
+//Turns "outputByte" into 8 bits and those 8 bits are mapped to the outputs.
 if(outputByte & (1 << 0)){
 digitalWrite(outputPins[0], HIGH);
 }else{
@@ -94,15 +102,15 @@ if(outputByte & (1 << 4)){
 }
 
 if(outputByte & (1 << 5)){
-analogWrite(A0, 255);
-}else{
-  analogWrite(A0, 0);
-}
-
-if(outputByte & (1 << 6)){
 analogWrite(A1, 255);
 }else{
   analogWrite(A1, 0);
+}
+
+if(outputByte & (1 << 6)){
+analogWrite(A0, 255);
+}else{
+  analogWrite(A0, 0);
 }
 
 if(outputByte & (1 << 7)){
