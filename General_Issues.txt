@@ -1,4 +1,4 @@
-ToDo: Making a PDF of every schematic. Adding finished Gerber files. Add the text "OpenSource Module by Fihdi" to every module somewhere.
+ToDo: Adding finished Gerber files. Add the text "OpenSource Module by Fihdi" to every module somewhere.
 
 -Module widths are not up to norm, meaning, when putting modules side by side the mounting holes may not exactly line up on a rails with 5.08mm spacing.
 
@@ -11,7 +11,5 @@ ToDo: Making a PDF of every schematic. Adding finished Gerber files. Add the tex
 -Potentiometer Orientation
 
 -Potentiometer ranges
-
--No values on the schematics
 
 -No "JLC" Label, when ordering through JLCPCB, the ordering number is printed on a random location and so it might be visible and ugly.
