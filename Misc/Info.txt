@@ -1,1 +1,6 @@
 Sources, Ideas, Misc. Schematics
+
+Used Components:
+
+Potentiometers are PTV111s by Bourns. 
+SP3T switches are MHS133G04 by TE Connectivity.
