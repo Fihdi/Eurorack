@@ -39,7 +39,7 @@ struct Clock {
   int inputPin;
 };
 
-Clock clocks[3]; // Three output Clocks and one aux. Clock for shifting the parameters
+Clock clocks[3]; // Three clocks 
 
 int shiftCounter = 0;
 
