@@ -119,7 +119,7 @@ void updateClocks() {
         digitalWrite(clocks[i].outputPin, clocks[i].state);
       }
     } else {
-      if (clocks[i - 1].state == LOW) {
+      if (clocks[i - 1].state == LOW) { //State of the current clock depends on the clock beforehand (except the master clock)
         if (currentMillis - clocks[i].previousMillis >= clocks[i].delayTime) {
           clocks[i].previousMillis = currentMillis;
           clocks[i].state = !clocks[i].state;
