@@ -23,8 +23,8 @@ Ccv...Output Clock 3
 #define Bin A2
 #define Cin A3
 
-const int minDelay = 1;     // Minimum delay in milliseconds (sets the maximum frequency)
-const int maxDelay = 100;   // Maximum delay in milliseconds (sets the minimum frequency)
+const int minDelay = 50;     // Minimum delay in milliseconds (sets the maximum frequency)
+const int maxDelay = 5000;   // Maximum delay in milliseconds (sets the minimum frequency)
 const int shiftPin = A1;
 
 const int clock0OriginalInputPin = A1;
