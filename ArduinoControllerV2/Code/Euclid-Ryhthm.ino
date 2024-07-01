@@ -1,4 +1,5 @@
-/*ClockModule
+/*3 Channel Rythm Generator with a master clock, the master clock frequency divided by four and a euclidean rhythm.
+
 
 Inputs:
 A ... Master Clock Rate CV
