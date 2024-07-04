@@ -136,21 +136,17 @@ Serial.println("]");
     int rhythmLength = map(analogRead(Bin), 0, 1023, 4, 24);
     int rhythmOnsets = min(map(analogRead(Cin), 0, 1023, 1, rhythmLength - 1), rhythmLength - 1);
 
-	//Only advance the euclidean Rhythm when the master clock goes high (rising edge)
-	
-    //generateEuclideanRhythm(rhythmOnsets, rhythmLength, euclideanRhythm);
-    
-
    uint16_t result = euclid(rhythmLength, rhythmOnsets);
 
   result = result << (16-rhythmLength);
 
-  Serial.println(result);
+ // Serial.println(result);
 
   for (int i = 15; i >= 0; i--) {
             rhythm[i] = (result & (1 << i));
     }
-
+	  
+/*
 Serial.print("[");
 for(int x = 0; x<16; x++){
 
@@ -158,11 +154,13 @@ if(rhythm[x]){
 Serial.print("x");
 }else{
 Serial.print(".");
+}	
 }
-}
+	  
 Serial.println("]");
-
-    if (rhythm[(15 - euclideanIndex) % rhythmLength]) {
+*/
+	  
+    if (rhythm[15 - (euclideanIndex % rhythmLength) ])  {
       digitalWrite(Ccv, HIGH);
     } else {
       digitalWrite(Ccv, LOW);
