@@ -92,33 +92,6 @@ void loop() {
 
 void updateOutput() {
 
-  Serial.println("In method");
-/*
-  int length = 13;
-
-  uint16_t result = euclid(13, 5);
-
-  result = result << (16-length);
-
-  for (int i = 15; i >= 0; i--) {
-            rhythm[i] = (result & (1 << i));
-    }
-
-Serial.println(result);
-
-
-Serial.print("[");
-for(int x = 15; x>=0; x--){
-
-if(rhythm[x]){
-Serial.print("1");
-}else{
-Serial.print("0");
-}
-}
-Serial.println("]");
-
-*/
   // Get the current time
   
   unsigned long currentMillis = millis();
@@ -136,6 +109,7 @@ Serial.println("]");
     int rhythmLength = map(analogRead(Bin), 0, 1023, 4, 24);
     int rhythmOnsets = min(map(analogRead(Cin), 0, 1023, 1, rhythmLength - 1), rhythmLength - 1);
 
+	 //  if(master.state==HIGH){ // Only change the euclidean output when the master state goes HIGH (Rising Edge)
    uint16_t result = euclid(rhythmLength, rhythmOnsets);
 
   result = result << (16-rhythmLength);
@@ -145,31 +119,16 @@ Serial.println("]");
   for (int i = 15; i >= 0; i--) {
             rhythm[i] = (result & (1 << i));
     }
-	  
-/*
-Serial.print("[");
-for(int x = 0; x<16; x++){
-
-if(rhythm[x]){
-Serial.print("x");
-}else{
-Serial.print(".");
-}	
-}
-	  
-Serial.println("]");
-*/
-	  
+ 
     if (rhythm[15 - (euclideanIndex % rhythmLength) ])  {
       digitalWrite(Ccv, HIGH);
     } else {
       digitalWrite(Ccv, LOW);
     }
-    euclideanIndex = (euclideanIndex + 1) % rhythmLength;
-	
+    euclideanIndex++;
 	
   }
-
+  //}
   if (currentMillis - divided.previousMillis >= divided.delayTime) {
     divided.previousMillis = currentMillis;
     divided.state = !divided.state;
