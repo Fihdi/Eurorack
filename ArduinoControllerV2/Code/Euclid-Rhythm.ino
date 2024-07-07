@@ -1,4 +1,4 @@
-/* V2 Euclidean Rhythm Generator
+/* Euclidean Rhythm Generator
 
 Inputs:
 A ... Master Clock Rate CV
