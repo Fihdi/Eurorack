@@ -23,7 +23,7 @@ Ccv...Euclidean Rythm
 #define Bin A2
 #define Cin A3
 
-const int minDelay = 60;     // Minimum delay in milliseconds (sets the maximum frequency) 
+const int minDelay = 20;     // Minimum delay in milliseconds (sets the maximum frequency) 
 const int maxDelay = 2000;   // Maximum delay in milliseconds (sets the minimum frequency)
 
 struct Clock {
@@ -84,19 +84,7 @@ void updateOutputs() {
     int rhythmLength = map(analogRead(Bin), 0, 1023, 4, 16);
     int rhythmOnsets = min(map(analogRead(Cin), 0, 1023, 1, rhythmLength - 1), rhythmLength - 1);
 
-    //////////////////////////Generating Euclids Sequence/////////////////////////////
-
-    int bucket = 0;
-  // Fill the track with the rhythm
-  for (int i = 0; i < rhythmLength; i++) {
-    bucket += rhythmOnsets;
-    if (bucket >= rhythmLength) {
-      bucket -= rhythmLength;
-      rhythm[i] = 1;
-    } else {
-      rhythm[i] = 0;
-    }
-  }
+    generateEuclid(rhythmLength, rhythmOnsets);
 
     //Write Euclid Output
     if (rhythm[euclideanIndex % rhythmLength])  {
@@ -114,4 +102,20 @@ void updateOutputs() {
     divided.state = !divided.state;
     digitalWrite(divided.outputPin, divided.state);
   }
+}
+
+void generateEuclid(int length, int onsets){
+
+    int bucket = 0;
+  // Fill the track with the rhythm
+  for (int i = 0; i < length; i++) {
+    bucket += onsets;
+    if (bucket >= length) {
+      bucket -= length;
+      rhythm[i] = 1;
+    } else {
+      rhythm[i] = 0;
+    }
+  }
+
 }
