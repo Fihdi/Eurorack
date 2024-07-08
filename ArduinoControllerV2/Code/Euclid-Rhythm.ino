@@ -86,14 +86,15 @@ void updateOutputs() {
 
     generateEuclid(rhythmLength, rhythmOnsets);
 
-    //Write Euclid Output
+    //Write Euclid Output but only if the master state changed into the high state (Rising edge)
+if(master.state == HIGH){	  
     if (rhythm[euclideanIndex % rhythmLength])  {
       digitalWrite(Ccv, HIGH);
     } else {
       digitalWrite(Ccv, LOW);
     }
     euclideanIndex++;
-	
+  }
   }
   
 //Write the divided clock
