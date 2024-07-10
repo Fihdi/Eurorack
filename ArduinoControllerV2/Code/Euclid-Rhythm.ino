@@ -1,5 +1,4 @@
 /* Euclidean Rhythm Generator
-
 Inputs:
 A ... Master Clock Rate CV
 B ... Length CV
@@ -94,7 +93,9 @@ if(master.state == HIGH){
       digitalWrite(Ccv, LOW);
     }
     euclideanIndex++;
-  }
+  }else{
+digitalWrite(Ccv, LOW);
+}
   }
   
 //Write the divided clock
