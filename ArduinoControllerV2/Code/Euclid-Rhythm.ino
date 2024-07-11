@@ -81,7 +81,7 @@ void updateOutputs() {
     
     // Read in Parameters for the Euclid Rhythm
     int rhythmLength = map(analogRead(Bin), 0, 1023, 4, 16);
-    int rhythmOnsets = min(map(analogRead(Cin), 0, 1023, 1, rhythmLength - 1), rhythmLength - 1);
+    int rhythmOnsets = map(analogRead(Cin), 0, 1023, 1, rhythmLength);
 
     generateEuclid(rhythmLength, rhythmOnsets);
 
