@@ -13,7 +13,7 @@ bool oldEncSwitch = 0;
 byte scroll = 0;
 
 #define NUM_OUTPUTS 8
-#define ENCSW 12
+#define ENCSW 8
 
 #define CV1 11
 #define CV2 10
@@ -22,8 +22,8 @@ byte scroll = 0;
 
 #define GT1 7
 #define GT2 2
-#define GT3 A7
-#define GT4 A6
+#define GT3 A1
+#define GT4 A2
 
 
 byte outputPins[NUM_OUTPUTS] = { GT1, GT2, GT3, GT4, CV1, CV2, CV3, CV4 };
