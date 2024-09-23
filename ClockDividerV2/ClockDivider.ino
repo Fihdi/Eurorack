@@ -12,7 +12,7 @@
 
 int counter = 0;
 int mode = 1;
-final int MODE_AMT = 3;
+int MODE_AMT = 3;
 
 //Interrupt flags
 volatile bool CLKtriggerInterrupted = false;
