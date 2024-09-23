@@ -1,9 +1,9 @@
 //Inputs
-#define CLK 11
-#define MODE 9
-#define RST 10
+#define CLK 8
+#define MODE 6
+#define RST 7
 
-/Outputs
+//Outputs
 #define OUT1 A2
 #define OUT2 12
 #define OUT3 9
@@ -13,16 +13,17 @@
 int counter = 0;
 int mode = 1;
 
-//Trigger flags
+//Interrupt flags
 volatile bool CLKtriggerInterrupted = false;
 volatile bool RSTtriggerInterrupted = false;
 volatile bool MODEtriggerInterrupted = false;
 
+//Interrupt conditions
 volatile bool MODEtriggered = false;
 volatile bool CLKtriggered = false;
 volatile bool RSTtriggered = false;
 
-//previous output states
+//Previous Output states
 bool OUT1State = false;
 bool OUT2State = false;
 bool OUT3State = false;
@@ -31,6 +32,8 @@ bool OUT5State = false;
 
 void setup() {
 
+  //No INPUT_PULLUP needed because of the external 10k resistors.
+  
   pinMode(CLK, INPUT);
   pinMode(MODE, INPUT);
   pinMode(RST, INPUT);
@@ -43,58 +46,61 @@ void setup() {
 }
 
 void loop() {
+  //Inputs have pullup resistors instead of pulldown, thus the trigger conditioning is inverted from e.g.: my Sequencer. 
   checkClock();
   checkReset();
   checkMode();
-
   writeOutputs();
 }
 
 void checkReset() {
-  RSTtriggered = (digitalRead(RST) == HIGH) && (RSTtriggerInterrupted == false);
+  RSTtriggered = (digitalRead(RST) == LOW) && (RSTtriggerInterrupted == false);
 
   if (RSTtriggered) {
-    //Reset triggered
     RSTtriggerInterrupted = true;
-    counter = 0;  //Reset counter
+    //Resetted, reset the counter
+    counter = 0;
+    //Should the program also reset the mode then de-comment the line beneath.
+    //mode=1;
   }
 
-  if ((digitalRead(RST) == LOW) && (RSTtriggerInterrupted == true)) {
+  if ((digitalRead(RST) == HIGH) && (RSTtriggerInterrupted == true)) {
     RSTtriggerInterrupted = false;  //Reset trigger flag
   }
 }
 
 void checkClock() {
 
-  CLKtriggered = (digitalRead(CLK) == HIGH) && (CLKtriggerInterrupted == false);
+  CLKtriggered = (digitalRead(CLK) == LOW) && (CLKtriggerInterrupted == false);
 
   if (CLKtriggered) {
-    //Clock triggered
     CLKtriggerInterrupted = true;
-    counter++;  //Increase counter
+    //Increase the counter by 1
+    counter++;
   }
 
-  if ((digitalRead(CLK) == LOW) && (CLKtriggerInterrupted == true)) {
-    CLKtriggerInterrupted = false;  //Reset clock flag
+  if ((digitalRead(CLK) == HIGH) && (CLKtriggerInterrupted == true)) {
+    CLKtriggerInterrupted = false;  //Reset trigger flag
   }
 }
 
 void checkMode() {
 
-  MODEtriggered = (digitalRead(MODE) == HIGH) && (MODEtriggerInterrupted == false);
+  MODEtriggered = (digitalRead(MODE) == LOW) && (MODEtriggerInterrupted == false);
 
   if (MODEtriggered) {
-    //Mode switched
     MODEtriggerInterrupted = true;
-    mode = (mode + 1) % 3; //Increase the mode counter
+    //Change the mode, modulo 3 to prevent the mode counter to get invalid values. 
+    mode = (mode + 1) % 3;
   }
 
-  if ((digitalRead(MODE) == LOW) && (MODEtriggerInterrupted == true)) {
-    MODEtriggerInterrupted = false;  //Reset mode flag
+  if ((digitalRead(MODE) == HIGH) && (MODEtriggerInterrupted == true)) {
+    MODEtriggerInterrupted = false;  //Reset trigger flag
   }
 }
 
 void writeOutputs() {
+  //Determines and writes the output states depending on the counter value, the mode and the previous output states.
   if (mode == 1) {
     //Binary Counting mode
     digitalWrite(OUT1, counter % 2 == 0 ? LOW : HIGH);
@@ -141,6 +147,7 @@ void writeOutputs() {
       OUT5State = !OUT5State;
     }
   }
+  
   if (mode == 3) {
     //Harmonic mode
     digitalWrite(OUT1, counter % 2 == 0 ? LOW : HIGH);
@@ -162,6 +169,4 @@ void writeOutputs() {
       OUT5State = !OUT5State;
     }
   }
-
-  //if(mode == 4, 5, 6 etc){} make your own modes.
 }
