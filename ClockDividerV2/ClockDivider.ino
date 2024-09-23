@@ -12,6 +12,7 @@
 
 int counter = 0;
 int mode = 1;
+final int MODE_AMT = 3;
 
 //Interrupt flags
 volatile bool CLKtriggerInterrupted = false;
@@ -90,8 +91,8 @@ void checkMode() {
 
   if (MODEtriggered) {
     MODEtriggerInterrupted = true;
-    //Change the mode, modulo 3 to prevent the mode counter to get invalid values. 
-    mode = (mode + 1) % 3;
+    //Change the mode, modulo MODE_AMT to prevent the mode counter to get invalid values. 
+    mode = (mode + 1) % MODE_AMT;
   }
 
   if ((digitalRead(MODE) == HIGH) && (MODEtriggerInterrupted == true)) {
@@ -101,7 +102,7 @@ void checkMode() {
 
 void writeOutputs() {
   //Determines and writes the output states depending on the counter value, the mode and the previous output states.
-  if (mode == 1) {
+  if (mode == 0) {
     //Binary Counting mode
     digitalWrite(OUT1, counter % 2 == 0 ? LOW : HIGH);
 
@@ -126,7 +127,7 @@ void writeOutputs() {
     }
   }
 
-  if (mode == 2) {
+  if (mode == 1) {
     //Prime Number mode
     digitalWrite(OUT1, counter % 2 == 0 ? LOW : HIGH);
 
@@ -148,7 +149,7 @@ void writeOutputs() {
     }
   }
   
-  if (mode == 3) {
+  if (mode == 2) {
     //Harmonic mode
     digitalWrite(OUT1, counter % 2 == 0 ? LOW : HIGH);
 
@@ -169,4 +170,5 @@ void writeOutputs() {
       OUT5State = !OUT5State;
     }
   }
+  //if(mode = 3){} //Add your own modes
 }
