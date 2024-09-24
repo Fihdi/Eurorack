@@ -197,26 +197,22 @@ void writeOutputs() {
     outputPin3 = OUT1;
   }
 
-
   digitalWrite(outputPin3, internal.state);
-
 
   if (internal.state == HIGH) {
     //OUT1
     if (rhythm1[counter % length1]) {
-      digitalWrite(OUT1, HIGH);
+      digitalWrite(outputPin1, HIGH);
     } else {
-      digitalWrite(OUT1, LOW);
+      digitalWrite(outputPin1, LOW);
     }
     //OUT2
     if (rhythm2[counter % length2]) {
-      digitalWrite(OUT2, HIGH);
+      digitalWrite(outputPin2, HIGH);
     } else {
-      digitalWrite(OUT2, LOW);
+      digitalWrite(outputPin2, LOW);
     }
-
   } else {
-
     digitalWrite(OUT1, LOW);
     digitalWrite(OUT2, LOW);
   }
