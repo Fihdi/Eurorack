@@ -148,7 +148,7 @@ void checkClock() {
   if (CLKtriggered) {
     CLKtriggerInterrupted = true;
     //Increase the counter by 1
-    counter++;
+    //counter++;
   }
 
   if ((digitalRead(CLK) == HIGH) && (CLKtriggerInterrupted == true)) {
