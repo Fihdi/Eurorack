@@ -6,6 +6,10 @@ ToDo: Adding finished Gerber files. Add the text "OpenSource Module by Fihdi" to
 
 -No grounding on the jacks sleeves.
 
+-Need to create BOMs and sources for components
+
+-No values and misaligned designators on the PCBs.
+
 -Missing bypass capacitors on almost every IC
 
 -Potentiometer Orientation
