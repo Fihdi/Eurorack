@@ -22,7 +22,6 @@ int external = 0;
 int counter = 0;
 int shift = 0;
 
-
 //Interrupt flags
 bool shiftStatus = false;  //Combines the status of the Shift button and the Shift Input, honestly I should have just combined these signals on the PCB itself and not waste a Pin. meh.
 volatile bool CLKtriggerInterrupted = false;
@@ -52,7 +51,6 @@ struct Clock {
   int state;
 };
 
-
 Clock internalCLK;
 
 void setup() {
@@ -79,36 +77,34 @@ void setup() {
 void loop() {
 
   updateinternalCLKClock();
-
   checkClock();
-
   updateEuclid();
   writeOutputs();
   //Inputs have pullup resistors instead of pulldown, thus the trigger conditioning is inverted from e.g.: my Sequencer.
 }
 
 void updateinternalCLKClock() {
-  
+
   //Switch back to the internalCLK Clock.
-  if(millis() > resetTime){
-    internal = true; 
+  if (millis() > resetTime) {
+    internal = true;
   }
 
-  if(internal){
-  unsigned long currentMillis = millis();
+  if (internal) {
+    unsigned long currentMillis = millis();
 
-  internalCLK.delayTime = map(analogRead(CLKI_RATE), 0, 1023, minDelay, maxDelay);  // Set the frequency of the internalCLK
+    internalCLK.delayTime = map(analogRead(CLKI_RATE), 0, 1023, minDelay, maxDelay);  // Set the frequency of the internalCLK
 
-  //Write internalCLK Clock state, the output is written in writeOutputs();
-  if (currentMillis - internalCLK.previousMillis >= internalCLK.delayTime) {
-    internalCLK.previousMillis = currentMillis;
-    internalCLK.state = !internalCLK.state;
-    //The state changed, if state is HIGH now that means the clock just had a rising Edge, update the counter.
-    if (internalCLK.state == HIGH) {
-      counter++;
+    //Write internalCLK Clock state, the output is written in writeOutputs();
+    if (currentMillis - internalCLK.previousMillis >= internalCLK.delayTime) {
+      internalCLK.previousMillis = currentMillis;
+      internalCLK.state = !internalCLK.state;
+      //The state changed, if state is HIGH now that means the clock just had a rising Edge, update the counter.
+      if (internalCLK.state == HIGH) {
+        counter++;
+      }
     }
   }
-}
 }
 
 void updateEuclid() {
@@ -164,13 +160,13 @@ void checkClock() {
   if (CLKtriggered) {
     //External Clock Rising Edge
     CLKtriggerInterrupted = true;
-    internal = false; //internalCLK clock is disabled.
+    internal = false;  //internalCLK clock is disabled.
     resetTime = millis() + 2000;
     //Set the new resetTime after which the internalCLK Clock takes over.
     counter++;
   }
- if(!internal && (digitalRead(CLK) == LOW) ){
-   //External Clock is held high
+  if (!internal && (digitalRead(CLK) == LOW)) {
+    //External Clock is held high
     resetTime = millis() + 2000;
   }
   if ((digitalRead(CLK) == HIGH) && (CLKtriggerInterrupted == true)) {
@@ -221,13 +217,13 @@ void writeOutputs() {
     outputPin3 = OUT1;
   }
 
-  if(internal){
+  if (internal) {
     digitalWrite(CLKO, internalCLK.state);
-  }else{
+  } else {
     digitalWrite(CLKO, digitalRead(CLK));
   }
 
-  if ((internalCLK.state == HIGH) || (digitalRead(CLK) == HIGH && !internal) ) {
+  if ((internalCLK.state == HIGH) || (digitalRead(CLK) == HIGH && !internal)) {
     //OUT1
     if (rhythm1[counter % length1]) {
       digitalWrite(outputPin1, HIGH);
