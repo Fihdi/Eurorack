@@ -169,7 +169,10 @@ void checkClock() {
     //Set the new resetTime after which the internalCLK Clock takes over.
     counter++;
   }
-
+ if(!internal && (digitalRead(CLK) == LOW) ){
+   //External Clock is held high
+    resetTime = millis() + 2000;
+  }
   if ((digitalRead(CLK) == HIGH) && (CLKtriggerInterrupted == true)) {
     //External Clock falling edge
     resetTime = millis() + 2000;
