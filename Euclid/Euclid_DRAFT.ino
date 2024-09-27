@@ -78,6 +78,8 @@ void loop() {
 
   updateinternalCLKClock();
   checkClock();
+  checkReset();
+  checkShift();
   updateEuclid();
   writeOutputs();
   //Inputs have pullup resistors instead of pulldown, thus the trigger conditioning is inverted from e.g.: my Sequencer.
