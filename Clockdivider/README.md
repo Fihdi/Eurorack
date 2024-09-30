@@ -2,4 +2,4 @@
 
 CD4040 based Clockdivider with 4 stages and Reset input.
 
-No Output Resistors.
+No Output Resistors. No Input Trigger conditioners thus the module only triggers with strong gates. 
