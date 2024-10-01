@@ -25,11 +25,11 @@ volatile bool CLKtriggered = false;
 volatile bool RSTtriggered = false;
 
 //Previous Output states
-bool OUT1State = false;
-bool OUT2State = false;
-bool OUT3State = false;
-bool OUT4State = false;
-bool OUT5State = false;
+bool OUT1State = true;
+bool OUT2State = true;
+bool OUT3State = true;
+bool OUT4State = true;
+bool OUT5State = true;
 
 void setup() {
 
@@ -51,7 +51,7 @@ void loop() {
   checkClock();
   checkReset();
   checkMode();
-  writeOutputs();
+  
 }
 
 void checkReset() {
@@ -78,6 +78,7 @@ void checkClock() {
     CLKtriggerInterrupted = true;
     //Increase the counter by 1
     counter++;
+    writeOutputs();
   }
 
   if ((digitalRead(CLK) == HIGH) && (CLKtriggerInterrupted == true)) {
@@ -102,71 +103,84 @@ void checkMode() {
 
 void writeOutputs() {
   //Determines and writes the output states depending on the counter value, the mode and the previous output states.
-  if (mode == 0) {
-    //Binary Counting mode
-    digitalWrite(OUT1, counter % 2 == 0 ? LOW : HIGH);
+    if (mode == 2) {
+    //Harmonic mode
+     if (counter % 2 == 0) {
+      digitalWrite(OUT1, OUT1State);
+      OUT1State = !OUT1State;
+    }
+
+    if (counter % 3 == 0) {
+      digitalWrite(OUT2, OUT2State);
+      OUT2State = !OUT2State;
+    }
 
     if (counter % 4 == 0) {
-      digitalWrite(OUT2, OUT2State ? LOW : HIGH);
+      digitalWrite(OUT3, OUT3State);
+      OUT3State = !OUT3State;
+    }
+
+    if (counter % 5 == 0) {
+      digitalWrite(OUT4, OUT4State);
+      OUT4State = !OUT4State;
+    }
+
+    if (counter % 6 == 0) {
+   //   digitalWrite(OUT5, OUT5State);
+      OUT5State = !OUT5State;
+    }
+  }
+   if (mode == 1) {
+    //Prime Number mode
+     if (counter % 2 == 0) {
+      digitalWrite(OUT1, OUT1State);
+      OUT1State = !OUT1State;
+    }
+
+    if (counter % 3 == 0) {
+      digitalWrite(OUT2, OUT2State);
+      OUT2State = !OUT2State;
+    }
+
+    if (counter % 5 == 0) {
+      digitalWrite(OUT3, OUT3State);
+      OUT3State = !OUT3State;
+    }
+
+    if (counter % 7 == 0) {
+      digitalWrite(OUT4, OUT4State);
+      OUT4State = !OUT4State;
+    }
+
+    if (counter % 11 == 0) {
+   //   digitalWrite(OUT5, OUT5State);
+      OUT5State = !OUT5State;
+    }
+  }
+    if (mode == 0) {
+    //Binary Counting mode
+     if (counter % 2 == 0) {
+      digitalWrite(OUT1, OUT1State);
+      OUT1State = !OUT1State;
+    }
+
+    if (counter % 4 == 0) {
+      digitalWrite(OUT2, OUT2State);
       OUT2State = !OUT2State;
     }
 
     if (counter % 8 == 0) {
-      digitalWrite(OUT3, OUT3State ? LOW : HIGH);
+      digitalWrite(OUT3, OUT3State);
       OUT3State = !OUT3State;
     }
 
     if (counter % 16 == 0) {
-      digitalWrite(OUT4, OUT4State ? LOW : HIGH);
+      digitalWrite(OUT4, OUT4State);
       OUT4State = !OUT4State;
     }
 
     if (counter % 32 == 0) {
-      digitalWrite(OUT5, OUT5State ? LOW : HIGH);
-      OUT5State = !OUT5State;
-    }
-  }
-
-  if (mode == 1) {
-    //Prime Number mode
-    digitalWrite(OUT1, counter % 2 == 0 ? LOW : HIGH);
-
-    if (counter % 3 == 0) {
-      digitalWrite(OUT2, OUT2State ? LOW : HIGH);
-      OUT2State = !OUT2State;
-    }
-    if (counter % 5 == 0) {
-      digitalWrite(OUT3, OUT3State ? LOW : HIGH);
-      OUT3State = !OUT3State;
-    }
-    if (counter % 7 == 0) {
-      digitalWrite(OUT4, OUT4State ? LOW : HIGH);
-      OUT4State = !OUT4State;
-    }
-    if (counter % 11 == 0) {
-      digitalWrite(OUT5, OUT5State ? LOW : HIGH);
-      OUT5State = !OUT5State;
-    }
-  }
-  
-  if (mode == 2) {
-    //Harmonic mode
-    digitalWrite(OUT1, counter % 2 == 0 ? LOW : HIGH);
-
-    if (counter % 3 == 0) {
-      digitalWrite(OUT2, OUT2State ? LOW : HIGH);
-      OUT2State = !OUT2State;
-    }
-    if (counter % 4 == 0) {
-      digitalWrite(OUT3, OUT3State ? LOW : HIGH);
-      OUT3State = !OUT3State;
-    }
-    if (counter % 5 == 0) {
-      digitalWrite(OUT4, OUT4State ? LOW : HIGH);
-      OUT4State = !OUT4State;
-    }
-    if (counter % 6 == 0) {
-      digitalWrite(OUT5, OUT5State ? LOW : HIGH);
+   //   digitalWrite(OUT5, OUT5State);
       OUT5State = !OUT5State;
     }
   }
