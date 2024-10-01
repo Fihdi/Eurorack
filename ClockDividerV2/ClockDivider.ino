@@ -11,7 +11,7 @@
 #define OUT5 5
 
 int counter = 0;
-int mode = 1;
+int mode = 0;
 int MODE_AMT = 3;
 
 //Interrupt flags
@@ -32,9 +32,8 @@ bool OUT4State = true;
 bool OUT5State = true;
 
 void setup() {
-
   //No INPUT_PULLUP needed because of the external 10k resistors.
-  
+
   pinMode(CLK, INPUT);
   pinMode(MODE, INPUT);
   pinMode(RST, INPUT);
@@ -47,11 +46,11 @@ void setup() {
 }
 
 void loop() {
-  //Inputs have pullup resistors instead of pulldown, thus the trigger conditioning is inverted from e.g.: my Sequencer. 
+  //Inputs have pullup resistors instead of pulldown, thus the trigger conditioning is inverted from e.g.: my Sequencer.
+
   checkClock();
   checkReset();
   checkMode();
-  
 }
 
 void checkReset() {
@@ -59,7 +58,21 @@ void checkReset() {
 
   if (RSTtriggered) {
     RSTtriggerInterrupted = true;
-    //Resetted, reset the counter
+    //Reset the Output states.
+    OUT1State = true;
+    OUT2State = true;
+    OUT3State = true;
+    OUT4State = true;
+    OUT5State = true;
+
+    //Reset the Outputs themselves
+    digitalWrite(OUT1, LOW);
+    digitalWrite(OUT2, LOW);
+    digitalWrite(OUT3, LOW);
+    digitalWrite(OUT4, LOW);
+    digitalWrite(OUT5, LOW);
+
+    //Reset the counter
     counter = 0;
     //Should the program also reset the mode then de-comment the line beneath.
     //mode=1;
@@ -74,6 +87,7 @@ void checkClock() {
 
   CLKtriggered = (digitalRead(CLK) == LOW) && (CLKtriggerInterrupted == false);
 
+  // CLKtriggered = true;
   if (CLKtriggered) {
     CLKtriggerInterrupted = true;
     //Increase the counter by 1
@@ -92,7 +106,7 @@ void checkMode() {
 
   if (MODEtriggered) {
     MODEtriggerInterrupted = true;
-    //Change the mode, modulo MODE_AMT to prevent the mode counter to get invalid values. 
+    //Change the mode, modulo MODE_AMT to prevent the mode counter to get invalid values.
     mode = (mode + 1) % MODE_AMT;
   }
 
@@ -103,9 +117,9 @@ void checkMode() {
 
 void writeOutputs() {
   //Determines and writes the output states depending on the counter value, the mode and the previous output states.
-    if (mode == 2) {
+  if (mode == 2) {
     //Harmonic mode
-     if (counter % 2 == 0) {
+    if (counter % 2 == 0) {
       digitalWrite(OUT1, OUT1State);
       OUT1State = !OUT1State;
     }
@@ -126,13 +140,13 @@ void writeOutputs() {
     }
 
     if (counter % 6 == 0) {
-   //   digitalWrite(OUT5, OUT5State);
+      //   digitalWrite(OUT5, OUT5State);
       OUT5State = !OUT5State;
     }
   }
-   if (mode == 1) {
+  if (mode == 1) {
     //Prime Number mode
-     if (counter % 2 == 0) {
+    if (counter % 2 == 0) {
       digitalWrite(OUT1, OUT1State);
       OUT1State = !OUT1State;
     }
@@ -153,13 +167,13 @@ void writeOutputs() {
     }
 
     if (counter % 11 == 0) {
-   //   digitalWrite(OUT5, OUT5State);
+      digitalWrite(OUT5, OUT5State);
       OUT5State = !OUT5State;
     }
   }
-    if (mode == 0) {
+  if (mode == 0) {
     //Binary Counting mode
-     if (counter % 2 == 0) {
+    if (counter % 2 == 0) {
       digitalWrite(OUT1, OUT1State);
       OUT1State = !OUT1State;
     }
@@ -180,7 +194,7 @@ void writeOutputs() {
     }
 
     if (counter % 32 == 0) {
-   //   digitalWrite(OUT5, OUT5State);
+      digitalWrite(OUT5, OUT5State);
       OUT5State = !OUT5State;
     }
   }
