@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/main/utility/Utility-Front.png)
 
-MISSING POWER and POWER ROUTED WRONG
+Multiple modules on one PCB
 
 Inverse VCO: Turns a frequency into a voltage
 
