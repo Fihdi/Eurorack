@@ -1,7 +1,6 @@
 #include <MIDI.h>
 MIDI_CREATE_DEFAULT_INSTANCE();
 
-
 #define ENCODER_OPTIMIZE_INTERRUPTS
 #include <Encoder.h>
 Encoder myEnc(5, 6);
@@ -25,14 +24,20 @@ byte scroll = 0;
 #define GT3 A1
 #define GT4 A2
 
-
 byte outputPins[NUM_OUTPUTS] = { GT1, GT2, GT3, GT4, CV1, CV2, CV3, CV4 };
 boolean outputStates[NUM_OUTPUTS] = { false };  // Initialize array of boolean variables for each output // false = gate, true = trig
 unsigned long trigTimerCLK = 0;
 unsigned long trigTimers[NUM_OUTPUTS] = { 0 };
 
-
 void setup() {
+
+  //Increase PWM Frequency
+  TCCR0A = 0b00000011;
+  TCCR0B = 0b00000001;
+  TCCR1A = 0b00000001;
+  TCCR1B = 0b00001001;
+  TCCR2A = 0b00000011;
+  TCCR2B = 0b00000001;
 
   // Initiate MIDI communications, listen to channel 1
   MIDI.begin(1);
@@ -54,13 +59,11 @@ void setup() {
   }
 }
 
-
 void loop() {
 
   hardwareCheck();
   midiCheck();
 }
-
 
 void flashLED(int pin, int times) {
 
@@ -75,26 +78,17 @@ void flashLED(int pin, int times) {
   digitalWrite(outputPins[scroll], HIGH);
 }
 
-
-
-
 void hardwareCheck() {
-
-
   oldEncSwitch = enc_switch_in;
   enc_switch_in = !digitalRead(ENCSW);
-
   newPosition1 = myEnc.read();
-
+  
   if ((newPosition1 + 2) / 2 < oldPosition1 / 2) {
     oldPosition1 = newPosition1;
     scroll = scroll + 1;
-
     digitalWrite(outputPins[scroll - 1], LOW);
     digitalWrite(outputPins[scroll], HIGH);
-
   }
-
   else if ((newPosition1 - 2) / 2 > oldPosition1 / 2) {
     oldPosition1 = newPosition1;
     scroll = scroll - 1;
@@ -103,39 +97,30 @@ void hardwareCheck() {
     digitalWrite(outputPins[scroll], HIGH);
   }
 
-
   if (scroll >= NUM_OUTPUTS) {
     scroll = 0;
   }
-
   else if (scroll < 0) {
     scroll = NUM_OUTPUTS - 1;
   }
-
-
+  
   if (oldEncSwitch == 0 && enc_switch_in == 1) {
-
     outputStates[scroll] = !outputStates[scroll];
-
+    
     if (outputStates[scroll] == false) {  //FLASH ONCE FOR GATE
       flashLED(outputPins[scroll], 1);
     }
-
     else {  //FLASH TWICE FOR TRIG
       flashLED(outputPins[scroll], 2);
     }
   }
 }
 
-
 void midiCheck() {
-
   MIDI.read();
-
   MIDI.setInputChannel(1);
-
+  
   for (int i = 0; i < NUM_OUTPUTS; i++) {
-
     if ((trigTimers[i] > 0) && (millis() - trigTimers[i] > 50)) {
       digitalWrite(outputPins[i], LOW);  // Set trigger low after 50 msec
       trigTimers[i] = 0;
@@ -145,7 +130,6 @@ void midiCheck() {
 
 void handleNoteOn(byte channel, byte pitch, byte velocity) {
   // Do whatever you want when a note is pressed.
-
   // Try to keep your callbacks short (no delays ect)
   // otherwise it would slow down the loop() and have a bad impact
   // on real-time performance.
@@ -235,7 +219,7 @@ void handleNoteOn(byte channel, byte pitch, byte velocity) {
       }
       break;
 
-
+    
     case 8:
       if (outputStates[7] == false) {
         digitalWrite(outputPins[7], HIGH);
