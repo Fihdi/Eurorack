@@ -304,18 +304,18 @@ void handleNoteOff(byte channel, byte pitch, byte velocity) {
 void handleControlChange(byte channel, byte number, byte value) {
 
   if (number == 20) {
-    analogWrite(CV4, number);
+    analogWrite(CV4, value);
   }
 
   else if (number == 21) {
-    analogWrite(CV1, number);
+    analogWrite(CV1, value);
   }
 
   else if (number == 22) {
-    analogWrite(CV2, number);
+    analogWrite(CV2, value);
   }
 
   else if (number == 23) {
-    analogWrite(CV3, number);
+    analogWrite(CV3, value);
   }
 }
