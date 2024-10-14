@@ -8,4 +8,4 @@ I used multiple TL072s instead of TL074 because that's what I got on hand at the
 
 Code mostly created by ChatGPT
 
-Issue: No issues, the module is just very big for what it can do.
+Issue: No issues, the module is just very big for what it can do. Building MIDI-INT instead and programming it to behave as the arduino controller (or leave it as a MIDI Interface) would save a lot of space. Downside: No Inputs.
