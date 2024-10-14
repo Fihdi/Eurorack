@@ -4334,7 +4334,7 @@
     (property "Reference" "C3" (at 66.294 91.694 90)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Value" "470n" (at 66.294 95.25 90)
+    (property "Value" "220n" (at 66.294 95.25 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Capacitor_THT:C_Axial_L3.8mm_D2.6mm_P7.50mm_Horizontal" (at 70.104 98.3488 0)
