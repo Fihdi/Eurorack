@@ -2,7 +2,9 @@
 
 3 Channel Sampler that pairs well with the A, B and C outputs of my sequencer
 
-The solder points for the buttons are too close to the hole.
+This module sounds really bad because I used ISD1820 ICs for the sampling, which are low quality. I made a new Project "SimpleSampler" that uses a Daisy Seed to store and play Samples.
+
+Known Issue: The solder points for the buttons are too close to the hole.
 When the push button is stuck through the PCB and tightend with a washer, the washer will make contact with both solder points and the button is effectively always pressed.
 I have put some small sheets of isolating rubber underneath the buttons to prevent this issue.
 
