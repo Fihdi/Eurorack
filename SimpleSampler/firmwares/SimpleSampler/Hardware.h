@@ -4,8 +4,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <fatfs.h>
 #include "daisy_seed.h"
-#include "fatfs.h"
 #include "../PTAL/core/Debouncer.h"
 #include "../PTAL/core/Encoder2.h"
 #include "../PTAL/core/Remapper.h"
@@ -78,9 +78,9 @@ public:
     encoder.Init(daisy.GetPin(PIN_ENCODER_A), daisy.GetPin(PIN_ENCODER_B), 4);
 
     // Initialize input gates.
-    gates[0].Init(daisy.GetPin(PIN_GATE_PLAY), 30, true, DSY_GPIO_PULLUP);
-    gates[1].Init(daisy.GetPin(PIN_GATE_RAND), 30, true, DSY_GPIO_PULLUP);
-    gates[2].Init(daisy.GetPin(PIN_GATE_PART), 30, true, DSY_GPIO_PULLUP);
+    gates[0].Init(daisy.GetPin(PIN_GATE_PLAY), 30);
+    gates[1].Init(daisy.GetPin(PIN_GATE_RAND), 30);
+    gates[2].Init(daisy.GetPin(PIN_GATE_PART), 30);
     _currentGateIndex = 0;
 
     // Initialize LED

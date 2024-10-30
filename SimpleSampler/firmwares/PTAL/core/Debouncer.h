@@ -28,12 +28,12 @@ namespace ptal {
 
 class Debouncer {
   private:
-    dsy_gpio _pin;
-    int      _state;
-    int      _debounceCounter;
-    bool     _isDebouncing;
-    int      _debounceLength;
-    bool     _inverted;
+    daisy::GPIO _pin;
+    int         _state;
+    int         _debounceCounter;
+    bool        _isDebouncing;
+    int         _debounceLength;
+    bool        _inverted;
 
   public:
 
@@ -43,15 +43,12 @@ class Debouncer {
 
     //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
     void Init (
-      dsy_gpio_pin  pin,
-      int           debounceLength, // = 8,
-      bool          invertedInput, //  = true,
-      dsy_gpio_pull pull //            = DSY_GPIO_PULLUP
+      daisy::Pin        pin,
+      int               debounceLength, // = 8,
+      bool              invertedInput = true,
+      daisy::GPIO::Pull pull = daisy::GPIO::Pull::PULLUP
     ) {
-      _pin.pin  = pin;
-      _pin.mode = DSY_GPIO_MODE_INPUT;
-      _pin.pull = pull;
-      dsy_gpio_init(&_pin);
+      _pin.Init(pin, daisy::GPIO::Mode::INPUT, pull);
 
       _debounceLength  = debounceLength;
       _inverted        = invertedInput;
@@ -74,7 +71,7 @@ class Debouncer {
       risingEdge  = false;
       fallingEdge = false;
 
-      int pinValue = dsy_gpio_read(&_pin);
+      int pinValue = _pin.Read();
 
       if (_state != pinValue) {
         _state = pinValue;

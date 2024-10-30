@@ -1,4 +1,3 @@
-#include "daisysp.h"
 #include "daisy_seed.h"
 #include "./Hardware.h"
 #include "./MemoryManager.h"
@@ -9,7 +8,6 @@
 
 
 using namespace daisy;
-using namespace daisysp;
 
 
 //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
