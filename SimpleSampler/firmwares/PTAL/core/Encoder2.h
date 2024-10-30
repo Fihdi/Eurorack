@@ -30,8 +30,8 @@ namespace ptal {
 
 class Encoder2 {
 private:
-  dsy_gpio _pinA;
-  dsy_gpio _pinB;
+  daisy::GPIO _pinA;
+  daisy::GPIO _pinB;
 
   uint8_t  _debounceA;
   uint8_t  _debounceB;
@@ -64,17 +64,9 @@ public:
 
 
   //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-  void Init (dsy_gpio_pin pinA, dsy_gpio_pin pinB, int throttle = 0) {
-    _pinA.pin  = pinA;
-    _pinA.mode = DSY_GPIO_MODE_INPUT;
-    _pinA.pull = DSY_GPIO_PULLUP;
-
-    _pinB.pin  = pinB;
-    _pinB.mode = DSY_GPIO_MODE_INPUT;
-    _pinB.pull = DSY_GPIO_PULLUP;
-
-    dsy_gpio_init(&_pinA);
-    dsy_gpio_init(&_pinB);
+  void Init (daisy::Pin pinA, daisy::Pin pinB, int throttle = 0) {
+    _pinA.Init(pinA, daisy::GPIO::Mode::INPUT, daisy::GPIO::Pull::PULLUP);
+    _pinB.Init(pinB, daisy::GPIO::Mode::INPUT, daisy::GPIO::Pull::PULLUP);
 
     value       = 0;
     increment   = 0;
@@ -105,8 +97,8 @@ public:
     }
 
     // Shift Button states to debounce
-    _debounceA = (_debounceA << 1) | dsy_gpio_read(&_pinA);
-    _debounceB = (_debounceB << 1) | dsy_gpio_read(&_pinB);
+    _debounceA = (_debounceA << 1) | _pinA.Read();
+    _debounceB = (_debounceB << 1) | _pinB.Read();
 
     // infer increment direction
     if ((_debounceA & 0x03) == 0x02 && (_debounceB & 0x03) == 0x00) {

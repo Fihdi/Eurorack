@@ -1,7 +1,6 @@
 #ifndef SimpleSampler_SamplePlayer_h
 #define SimpleSampler_SamplePlayer_h
 
-#include "daisysp.h"
 #include "daisy_seed.h"
 #include "./constants.h"
 #include "./SampleMetadata.h"

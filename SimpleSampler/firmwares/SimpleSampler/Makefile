@@ -5,8 +5,7 @@ TARGET = SimpleSampler
 CPP_SOURCES = SimpleSampler.cpp
 
 # Library Locations
-LIBDAISY_DIR = ../../libDaisy
-DAISYSP_DIR = ../../DaisySP
+LIBDAISY_DIR = ../../../libDaisy
 
 # Includes FatFS source files within project.
 USE_FATFS = 1

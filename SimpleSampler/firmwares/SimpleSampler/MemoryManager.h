@@ -1,7 +1,6 @@
 #ifndef SimpleSampler_MemoryManager_h
 #define SimpleSampler_MemoryManager_h
 
-#include "daisysp.h"
 #include "daisy_seed.h"
 #include "./constants.h"
 

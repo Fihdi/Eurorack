@@ -57,16 +57,16 @@ class PwmLed {
     };
 
 
-    dsy_gpio _pin;
-    int      _pwmThreshold;     // width of the PWM (64 levels)
-    Mode     _mode;             // animation mode
-    bool     _state;            // hardware state of the LED (ON or OFF)
-    int      _animationSpeed;   // how many update required to increment one frame
-    int      _animationCounter; // counter to control the duration of one frame
-    int      _animationMin;     // min intensity of animation
-    int      _animationMax;     // max intensity of animation
-    int      _lfoDirection;
-    LedState _ledState;
+    daisy::GPIO _pin;
+    int         _pwmThreshold;     // width of the PWM (64 levels)
+    Mode        _mode;             // animation mode
+    bool        _state;            // hardware state of the LED (ON or OFF)
+    int         _animationSpeed;   // how many update required to increment one frame
+    int         _animationCounter; // counter to control the duration of one frame
+    int         _animationMin;     // min intensity of animation
+    int         _animationMax;     // max intensity of animation
+    int         _lfoDirection;
+    LedState    _ledState;
 
 
 
@@ -74,7 +74,7 @@ class PwmLed {
     void _updatePwm (int pwmCounter) {
       bool value = pwmCounter < _pwmThreshold;
       if (_state == value) return;
-      dsy_gpio_write(&_pin, value);
+      _pin.Write(value);
       _state = value;
     }
 
@@ -100,7 +100,7 @@ class PwmLed {
 
     //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
     void _restoreState () {
-      if (_ledState.state != _state) dsy_gpio_write(&_pin, _ledState.state);
+      if (_ledState.state != _state) _pin.Write(_ledState.state);
       _mode             = _ledState.mode;
       _state            = _ledState.state;
       _pwmThreshold     = _ledState.pwm;
@@ -130,13 +130,11 @@ class PwmLed {
     }
 
     //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-    void Init (dsy_gpio_pin  pin) {
-      _pin.pin  = pin;
-      _pin.mode = DSY_GPIO_MODE_OUTPUT_PP;
-      dsy_gpio_init(&_pin);
+    void Init (daisy::Pin pin) {
+      _pin.Init(pin, GPIO::Mode::OUTPUT);
       _mode  = Mode::MODE_SOLID;
       _state = false;
-      dsy_gpio_write(&_pin, false);
+      _pin.Write(false);
     }
 
     //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
@@ -173,7 +171,7 @@ class PwmLed {
       _mode = Mode::MODE_SOLID;
       if (_state == value) return;
       _state = value;
-      dsy_gpio_write(&_pin, value);
+      _pin.Write(value);
     }
 
     //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
@@ -316,7 +314,7 @@ class PwmLed {
           if (--_animationCounter == 0) {
             _animationCounter = _animationSpeed;
             _state = !_state;
-            dsy_gpio_write(&_pin, _state);
+            _pin.Write(_state);
           }
           break;
 
@@ -379,7 +377,7 @@ class PwmLed {
             } else {
               _animationCounter = _animationSpeed;
               _state = !_state;
-              dsy_gpio_write(&_pin, _state);
+              _pin.Write(_state);
             }
           }
           break;
