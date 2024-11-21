@@ -4,6 +4,8 @@
 
 Me and /u/WelchRedneck were working on wavefolders at the same time independently. A few days after I posted this schematic for a simple wavefolder, /u/WelchRedneck has extended upon it:
 
+![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/Fold2/FirstCircuit.PNG)
+
 CAP is the input signal being clamped at +CV and -CV. I then subtract the original signal from the clamped signal to get a folded output.
 
 Extending the clamping circuit with multiple limits and using the same principle as in Buchlas "Timbre Modulation" circuit where the input signal is split into multiple "deadbands" and then re-added and subtracted from each other to produce the folded output, we get the full circuit that was made by /u/WelchRedneck on Reddit. 
