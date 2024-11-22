@@ -81,9 +81,16 @@ public:
     encoder.Init(daisy.GetPin(PIN_ENCODER_A), daisy.GetPin(PIN_ENCODER_B), 4);
 
     // Initialize input gates.
+    #ifdef USE_POKI
     gates[0].Init(daisy.GetPin(PIN_GATE_PLAY), 30);
     gates[1].Init(daisy.GetPin(PIN_GATE_RAND), 30);
     gates[2].Init(daisy.GetPin(PIN_GATE_PART), 30);
+    #else
+    gates[0].Init(daisy.GetPin(PIN_GATE_PLAY), 30, true, daisy::GPIO::Pull::NOPULL);
+    gates[1].Init(daisy.GetPin(PIN_GATE_RAND), 30, true, daisy::GPIO::Pull::NOPULL);
+    gates[2].Init(daisy.GetPin(PIN_GATE_PART), 30, true, daisy::GPIO::Pull::NOPULL);
+    #endif
+
     _currentGateIndex = 0;
 
     // Initialize LED
