@@ -50,7 +50,7 @@ writeOutputs();
 
   if ((digitalRead(CLK) == HIGH) && (CLKtriggerInterrupted == true)) {
     CLKtriggerInterrupted = false;  //Reset Clock flag
-
+    //Reset the Outputs
     digitalWrite(CLKO, LOW);
     digitalWrite(OUT1, LOW);
     digitalWrite(OUT2, LOW);
@@ -58,7 +58,7 @@ writeOutputs();
 }
 
 void writeOutputs() {
-//New refom number
+//New random number
   ref = random(1024);
 //Output Bernoulli Gates
 
