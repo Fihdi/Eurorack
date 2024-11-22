@@ -1,4 +1,4 @@
-# Blink
+# Test SD card
 
 Test SD Card:
 
