@@ -1,5 +1,5 @@
 #include "daisy_seed.h"
-#include "./Hardware.h"
+#include "../PTAL/hardwares/Hardware.h"
 #include "./MemoryManager.h"
 #include "./SamplePlayer.h"
 #include "./FilesScanner.h"
@@ -59,7 +59,7 @@ int main (void) {
     if (hardware.cvInput.changed) {
       samplePlayer.SetSpeed(0.5f + hardware.cvInput.value * 1.5f);
     }
-    
+
     if (hardware.encoder.scrolled) {
       if (hardware.encoder.increment ==  1) samplePlayer.NextSample();
       if (hardware.encoder.increment == -1) samplePlayer.PrevSample();

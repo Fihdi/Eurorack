@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "daisy_seed.h"
-#include "./Hardware.h"
 #include "./constants.h"
 #include "./wavFormat.h"
 #include "./SampleMetadata.h"
