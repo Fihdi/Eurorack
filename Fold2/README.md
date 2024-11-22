@@ -2,13 +2,13 @@
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/Fold2/FoldFront.png)
 
-Me and /u/WelchRedneck were working on wavefolders at the same time independently. A few days after I posted this schematic for a simple wavefolder, /u/WelchRedneck has extended upon it:
+Me and [Davey Graham](https://github.com/DaveyGraham/Daveys_Deadband) were working on wavefolders at the same time independently. A few days after I posted this schematic for a simple wavefolder, Davey has extended upon it:
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/Fold2/FirstCircuit.PNG)
 
 CAP is the input signal being clamped at +CV and -CV. I then subtract the original signal from the clamped signal to get a folded output.
 
-Extending the clamping circuit with multiple limits and using the same principle as in Buchlas "Timbre Modulation" circuit where the input signal is split into multiple "deadbands" and then re-added and subtracted from each other to produce the folded output, we get the full circuit that was made by /u/WelchRedneck on Reddit. 
+Extending the clamping circuit with multiple limits and using the same principle as in Buchlas "Timbre Modulation" circuit where the input signal is split into multiple "deadbands" and then re-added and subtracted from each other to produce the folded output, we get the full circuit that was made by Davey Graham. 
 
 The deadbands are made using this diode structure, it can also be seen as a clamping circuit with variable clamping voltages:
 
@@ -22,7 +22,10 @@ The resistor chain and buffers are there to provide the upper and lower limits f
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/Fold2/theory.png)
 
-As in the Buchla circuit, every other band is summed together, resulting in two signals A and B. The two signals cross each other, and when B is subtracted from A, the resulting wave changes in polarity at every crossing, and we get folding.
+As in the Buchla circuit, every other band is summed together, resulting in two signals A and B (I did not draw the summing stages for simplicity) 
+With no input, the bias voltages between the diodes sum up to zero volts, so with 0V in you get 0V out. OK. Boring.
+
+With a sine input the signals A and B cross each other, and when B is subtracted from A, the resulting wave changes in polarity at every crossing, and we get folding. 
 
 # How to add voltage control?
 
