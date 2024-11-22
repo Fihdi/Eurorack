@@ -1,20 +1,23 @@
-#ifndef _SimpleSampler_hardware_h
-#define _SimpleSampler_hardware_h
+#ifndef _PTAL_hardwares_Hardware_h
+#define _PTAL_hardwares_Hardware_h
 
 
 #include <stdio.h>
 #include <string.h>
 #include <fatfs.h>
 #include "daisy_seed.h"
-#include "../PTAL/core/Debouncer.h"
-#include "../PTAL/core/Encoder2.h"
-#include "../PTAL/core/Remapper.h"
-#include "../PTAL/core/PwmLed.h"
+#include "../core/Debouncer.h"
+#include "../core/Encoder2.h"
+#include "../core/Remapper.h"
+#include "../core/PwmLed.h"
 
 
 using namespace daisy;
 
+
+
 //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+// Uncomment the following line to test with POKI hardware
 // #define USE_POKI
 
 #ifdef USE_POKI
@@ -78,13 +81,20 @@ public:
     encoder.Init(daisy.GetPin(PIN_ENCODER_A), daisy.GetPin(PIN_ENCODER_B), 4);
 
     // Initialize input gates.
+    #ifdef USE_POKI
     gates[0].Init(daisy.GetPin(PIN_GATE_PLAY), 30);
     gates[1].Init(daisy.GetPin(PIN_GATE_RAND), 30);
     gates[2].Init(daisy.GetPin(PIN_GATE_PART), 30);
+    #else
+    gates[0].Init(daisy.GetPin(PIN_GATE_PLAY), 30, true, daisy::GPIO::Pull::NOPULL);
+    gates[1].Init(daisy.GetPin(PIN_GATE_RAND), 30, true, daisy::GPIO::Pull::NOPULL);
+    gates[2].Init(daisy.GetPin(PIN_GATE_PART), 30, true, daisy::GPIO::Pull::NOPULL);
+    #endif
+
     _currentGateIndex = 0;
 
     // Initialize LED
-    ptal::PwmLed::SetGlobalSpeed(340);
+    ptal::PwmLed::SetGlobalSpeed(980);
     led.Init(daisy.GetPin(PIN_LED));
     _ledPwmCounter = 0;
 
@@ -131,4 +141,4 @@ public:
 };
 
 
-#endif // _SimpleSampler_hardware_h
+#endif // _PTAL_hardwares_Hardware_h

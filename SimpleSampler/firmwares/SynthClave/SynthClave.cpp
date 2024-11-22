@@ -1,22 +1,17 @@
 #include "daisy_seed.h"
 #include "../PTAL/hardwares/Hardware.h"
-#include "./MemoryManager.h"
-#include "./SamplePlayer.h"
-#include "./FilesScanner.h"
-#include "./debug.h"
-#include "./constants.h"
+#include "./Osc.h"
+#include "./Lpg.h"
+#include "./DecayEnvelope.h"
 
 
 using namespace daisy;
 
-
 //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Hardware      hardware;
-MemoryManager memoryManager;
-SamplePlayer  samplePlayer;
-FilesScanner  filesScanner;
-
-
+Osc           osc;
+Lpg           lpg;
+DecayEnvelope env;
 
 //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 static void AudioCallback (
@@ -24,12 +19,19 @@ static void AudioCallback (
   daisy::AudioHandle::OutputBuffer out,
   size_t size) {
 
-  // Clear buffer
-  memset(out[0], 0, size * sizeof(float));
-  memset(out[1], 0, size * sizeof(float));
+  for (size_t i = 0; i < size; ++i) {
+    float sample = lpg.Process(osc.Process(), env.Process());
+    out[0][i] = sample;
+    out[1][i] = sample;
+  }
+}
 
-  // Process sample player
-  samplePlayer.ProcessBlock(out[0], out[1], size);
+
+//▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+void UpdateSynthParams () {
+  float v = hardware.cvInput.value;
+  osc.SetFrequency(300.0f + v * 80.0f);
+  env.SetLengthMs(300.0f - v * 90.0f);
 }
 
 
@@ -37,38 +39,26 @@ static void AudioCallback (
 int main (void) {
   // initializations
   hardware.Init();
-  debug.Init(&hardware);
-  hardware.InitSdCard();
-  memoryManager.Init();
-  samplePlayer.Init();
-  filesScanner.Init(&hardware);
-  filesScanner.ScanDirectory(&memoryManager, &samplePlayer);
-
+  UpdateSynthParams();
 
   //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
   // Setup audio callback
   hardware.daisy.SetAudioSampleRate(SaiHandle::Config::SampleRate::SAI_48KHZ);
-  hardware.daisy.SetAudioBlockSize(AUDIO_BLOCK_SIZE);
+  hardware.daisy.SetAudioBlockSize(16);
   hardware.daisy.StartAudio(AudioCallback);
-
 
   //▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
   while (true) {
     hardware.Update();
 
+    hardware.led.SetPwm(env.GetValue());
+
+    if (hardware.gatePlay->risingEdge) {
+      env.Trigger();
+    }
+
     if (hardware.cvInput.changed) {
-      samplePlayer.SetSpeed(0.5f + hardware.cvInput.value * 1.5f);
+      UpdateSynthParams();
     }
-
-    if (hardware.encoder.scrolled) {
-      if (hardware.encoder.increment ==  1) samplePlayer.NextSample();
-      if (hardware.encoder.increment == -1) samplePlayer.PrevSample();
-    }
-
-    if (hardware.gatePlay->risingEdge) samplePlayer.TriggerSample();
-
-    // TODO: gateRand, gatePart
-
-    hardware.led.SetSolid(samplePlayer.IsPlaying());
   }
 }
