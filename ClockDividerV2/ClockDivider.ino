@@ -119,54 +119,54 @@ void writeOutputs() {
   //Determines and writes the output states depending on the counter value, the mode and the previous output states.
   if (mode == 2) {
     //Harmonic mode
-    if (counter % 2 == 0) {
+    if (counter % 1 == 0) {
       digitalWrite(OUT1, OUT1State);
       OUT1State = !OUT1State;
     }
 
-    if (counter % 3 == 0) {
+    if (counter % 2 == 0) {
       digitalWrite(OUT2, OUT2State);
       OUT2State = !OUT2State;
     }
 
-    if (counter % 4 == 0) {
+    if (counter % 3 == 0) {
       digitalWrite(OUT3, OUT3State);
       OUT3State = !OUT3State;
     }
 
-    if (counter % 5 == 0) {
+    if (counter % 4 == 0) {
       digitalWrite(OUT4, OUT4State);
       OUT4State = !OUT4State;
     }
 
-    if (counter % 6 == 0) {
+    if (counter % 5 == 0) {
       //   digitalWrite(OUT5, OUT5State);
       OUT5State = !OUT5State;
     }
   }
   if (mode == 1) {
     //Prime Number mode
-    if (counter % 2 == 0) {
+    if (counter % 1 == 0) {
       digitalWrite(OUT1, OUT1State);
       OUT1State = !OUT1State;
     }
 
-    if (counter % 3 == 0) {
+    if (counter % 2 == 0) {
       digitalWrite(OUT2, OUT2State);
       OUT2State = !OUT2State;
     }
 
-    if (counter % 5 == 0) {
+    if (counter % 3 == 0) {
       digitalWrite(OUT3, OUT3State);
       OUT3State = !OUT3State;
     }
 
-    if (counter % 7 == 0) {
+    if (counter % 5 == 0) {
       digitalWrite(OUT4, OUT4State);
       OUT4State = !OUT4State;
     }
 
-    if (counter % 11 == 0) {
+    if (counter % 7 == 0) {
       digitalWrite(OUT5, OUT5State);
       OUT5State = !OUT5State;
     }
