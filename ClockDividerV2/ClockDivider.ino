@@ -173,27 +173,27 @@ void writeOutputs() {
   }
   if (mode == 0) {
     //Binary Counting mode
-    if (counter % 2 == 0) {
+    if (counter % 1 == 0) {
       digitalWrite(OUT1, OUT1State);
       OUT1State = !OUT1State;
     }
 
-    if (counter % 4 == 0) {
+    if (counter % 2 == 0) {
       digitalWrite(OUT2, OUT2State);
       OUT2State = !OUT2State;
     }
 
-    if (counter % 8 == 0) {
+    if (counter % 4 == 0) {
       digitalWrite(OUT3, OUT3State);
       OUT3State = !OUT3State;
     }
 
-    if (counter % 16 == 0) {
+    if (counter % 8 == 0) {
       digitalWrite(OUT4, OUT4State);
       OUT4State = !OUT4State;
     }
 
-    if (counter % 32 == 0) {
+    if (counter % 16 == 0) {
       digitalWrite(OUT5, OUT5State);
       OUT5State = !OUT5State;
     }
