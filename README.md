@@ -4,7 +4,7 @@ Schematics and PCBs for my Eurorack modules
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/main/PersonalSetup.png)
 
-If you were to build these modules yourself make sure to separate the boards in the KiCad projects! Besides revision boards, I combine every PCB of a module into a single board (because its cheaper) and use a PCB cutter like this to cut separate them. Separate the boards in the KiCad project or add V-cuts.
+If you were to build these modules yourself make sure to separate the boards in the KiCad projects! Besides revision boards, I combine every PCB of a module into a single board (because its cheaper) and use a PCB cutter like this to separate them. Separate the boards in the KiCad project or add V-cuts.
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/main/Cutter.jpeg)
 
