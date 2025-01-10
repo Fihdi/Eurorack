@@ -1,9 +1,9 @@
 //Inputs
-#define CLK 4         //External Clock Pin
+#define CLK 19         //External Clock Pin
 #define CLKI_RATE A0  //internalCLK Clock Rate voltage
-#define SHIFT A5
-#define SHIFT_BUTTON 9
-#define RST 10    //Reset Button Button
+#define SHIFT 4
+#define SHIFT_BUTTON 10
+#define RST 9    //Reset Button Button
 #define L1_IN A7  //Voltage for Length of first Euclid Rhythm
 #define L2_IN A2  //Voltage for Length of second Euclid Rhythm
 #define S1_IN A3  //Voltage for Amount of steps of the first Euclid Rhythm
@@ -14,13 +14,13 @@
 #define OUT1 8  //Euclid. Ryhthm 1 Output
 #define OUT2 7  //Euclid. Ryhthm 2 Output
 
-int timeout = 2000;  //Timeout in milliseconds it takes for the internalCLK clock to take over. After X without an external Clock, the internalCLK clock takes over.
 bool internal = true;
-int resetTime = 0;
-int external = 0;
 
 int counter = 0;
 int shift = 0;
+
+int outputPin1 = OUT1;
+int outputPin2 = OUT2;
 
 //Interrupt flags
 bool shiftStatus = false;  //Combines the status of the Shift button and the Shift Input, honestly I should have just combined these signals on the PCB itself and not waste a Pin. meh.
@@ -87,11 +87,6 @@ void loop() {
 
 void updateinternalCLKClock() {
 
-  //Switch back to the internalCLK Clock.
-  if (millis() > resetTime) {
-    internal = true;
-  }
-
   if (internal) {
     unsigned long currentMillis = millis();
 
@@ -146,8 +141,11 @@ void checkReset() {
 
   if (RSTtriggered) {
     RSTtriggerInterrupted = true;
-    //Resetted, reset the channel assignment => Reset the shifts to the default
+    //Reset the channel assignment and reset the counter
     shift = 0;
+    counter = 0;
+    //Activate the internal clock
+    internal = true;
   }
 
   if ((digitalRead(RST) == HIGH) && (RSTtriggerInterrupted == true)) {
@@ -156,25 +154,30 @@ void checkReset() {
 }
 
 void checkClock() {
-
   CLKtriggered = (digitalRead(CLK) == LOW) && (CLKtriggerInterrupted == false);
 
   if (CLKtriggered) {
-    //External Clock Rising Edge
+    // External Clock Rising Edge
     CLKtriggerInterrupted = true;
-    internal = false;  //internalCLK clock is disabled.
-    resetTime = millis() + 2000;
-    //Set the new resetTime after which the internalCLK Clock takes over.
+      // Switching from internal to external clock
+      internal = false;       // Disable the internal clock and the WriteOutputs function.
     counter++;
-  }
-  if (!internal && (digitalRead(CLK) == LOW)) {
-    //External Clock is held high
-    resetTime = millis() + 2000;
+      //Write the outputs directly after the counter increased, this prevents pulses from firing after the transition from LOW to HIGH on the output.
+      //CLK OUT
+      digitalWrite(CLKO, HIGH);
+      // OUT1
+      digitalWrite(outputPin1, rhythm1[counter % length1] ? HIGH : LOW);
+      // OUT2
+      digitalWrite(outputPin2, rhythm2[counter % length2] ? HIGH : LOW);
+    
   }
   if ((digitalRead(CLK) == HIGH) && (CLKtriggerInterrupted == true)) {
-    //External Clock falling edge
-    resetTime = millis() + 2000;
-    CLKtriggerInterrupted = false;  //Reset Clock flag
+    // External Clock Falling Edge
+    CLKtriggerInterrupted = false; // Reset Clock flag
+
+      digitalWrite(CLKO, LOW);
+      digitalWrite(outputPin1, LOW);
+      digitalWrite(outputPin2, LOW);
   }
 }
 
@@ -190,58 +193,32 @@ void checkShift() {
     shift = (shift + 1) % 4;
   }
 
+  //Swap the channels 1 and 2, you can add more modes if you want to shift the clock out as well
+   if (shift == 0) {
+    outputPin1 = OUT1;
+    outputPin2 = OUT2;
+  } else if (shift == 1) {
+    outputPin1 = OUT2;
+    outputPin2 = OUT1;
+  }
+
   if ((digitalRead(CLK) == HIGH) && (SHIFTtriggerInterrupted == true)) {
     SHIFTtriggerInterrupted = false;  //Reset Shift flag
   }
 }
 
 void writeOutputs() {
-
-  int outputPin1;
-  int outputPin2;
-  int outputPin3;
-
-  if (shift == 0) {
-    outputPin1 = OUT1;
-    outputPin2 = OUT2;
-    outputPin3 = CLKO;
-  } else if (shift == 1) {
-    outputPin1 = OUT2;
-    outputPin2 = CLKO;
-    outputPin3 = OUT1;
-  } else if (shift == 2) {
-    outputPin1 = CLKO;
-    outputPin2 = OUT1;
-    outputPin3 = OUT2;
-  } else if (shift == 3) {
-    outputPin1 = CLKO;
-    outputPin2 = OUT2;
-    outputPin3 = OUT1;
-  }
-
+//Only writes output when the internal clock is active, otherwise the outputs are written in the "CheckClock" function.
   if (internal) {
     digitalWrite(CLKO, internalCLK.state);
-  } else {
-    digitalWrite(CLKO, digitalRead(CLK));
-  }
-
-  if ((internalCLK.state == HIGH) || (digitalRead(CLK) == HIGH && !internal)) {
-    //OUT1
-    if (rhythm1[counter % length1]) {
-      digitalWrite(outputPin1, HIGH);
+    if (internalCLK.state == HIGH) {
+      // OUT1
+      digitalWrite(outputPin1, rhythm1[counter % length1] ? HIGH : LOW);
+      // OUT2
+      digitalWrite(outputPin2, rhythm2[counter % length2] ? HIGH : LOW);
     } else {
       digitalWrite(outputPin1, LOW);
-    }
-    //OUT2
-    if (rhythm2[counter % length2]) {
-      digitalWrite(outputPin2, HIGH);
-    } else {
       digitalWrite(outputPin2, LOW);
     }
-
-  } else {
-
-    digitalWrite(OUT1, LOW);
-    digitalWrite(OUT2, LOW);
-  }
+  } 
 }
