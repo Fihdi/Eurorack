@@ -1,4 +1,4 @@
-# Full Synthesizer Voice module and Envelope Generator
+# Full Synthesizer Voice with Envelope Generator
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/Voice/VoiceFront.png)
 
