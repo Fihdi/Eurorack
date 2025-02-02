@@ -1,6 +1,7 @@
+//3 Channel Euclid generator. Needs an external clock, the RATE knob controls the amount of steps of the 3rd channel.
+
 //Inputs
 #define CLK 19         //External Clock Pin
-#define CLKI_RATE A0  //internalCLK Clock Rate voltage
 #define SHIFT 4
 #define SHIFT_BUTTON 10
 #define RST 9    //Reset Button Button
@@ -8,19 +9,19 @@
 #define L2_IN A2  //Voltage for Length of second Euclid Rhythm
 #define S1_IN A3  //Voltage for Amount of steps of the first Euclid Rhythm
 #define S2_IN A1  //Voltage for Amount of steps of the second Euclid Rhythm
+#define S3_IN A0  //Voltage for Amount of steps of the third Euclid Rhythm
 
 //Outputs
-#define CLKO 2  //internalCLK Clock Output
+#define OUT3 2  //Euclid. Ryhthm 3 Output
 #define OUT1 8  //Euclid. Ryhthm 1 Output
 #define OUT2 7  //Euclid. Ryhthm 2 Output
-
-bool internal = true;
 
 int counter = 0;
 int shift = 0;
 
 int outputPin1 = OUT1;
 int outputPin2 = OUT2;
+int outputPin3 = OUT3;
 
 //Interrupt flags
 bool shiftStatus = false;  //Combines the status of the Shift button and the Shift Input, honestly I should have just combined these signals on the PCB itself and not waste a Pin. meh.
@@ -34,31 +35,22 @@ volatile bool RSTtriggered = false;
 volatile bool CLKtriggered = false;
 volatile bool SHIFTtriggered = false;
 
-volatile int length1 = 16;
-volatile int length2 = 16;
+volatile int length1 = 32;
+volatile int length2 = 32;
+int length3 = 16;
 volatile int steps1 = 8;
 volatile int steps2 = 8;
+volatile int steps3 = 8;
 
-const int minDelay = 20;    // Minimum delay in milliseconds (sets the maximum frequency)
-const int maxDelay = 2000;  // Maximum delay in milliseconds (sets the minimum frequency)
-
-bool rhythm1[16];  // Maximum length of 16
-bool rhythm2[16];  // Maximum length of 16
-
-struct Clock {
-  unsigned long previousMillis;  // Variable to store the current state and the last toggle time for each clock
-  int delayTime;
-  int state;
-};
-
-Clock internalCLK;
+bool rhythm1[32];  // Maximum length of 32
+bool rhythm2[32];  // Maximum length of 32
+bool rhythm3[16]; // fixed length
 
 void setup() {
 
   //No INPUT_PULLUP needed because of the external 10k resistors.
 
   pinMode(CLK, INPUT_PULLUP);
-  pinMode(CLKI_RATE, INPUT);
   pinMode(SHIFT, INPUT_PULLUP);
   pinMode(SHIFT_BUTTON, INPUT);
   pinMode(RST, INPUT);
@@ -66,50 +58,29 @@ void setup() {
   pinMode(S1_IN, INPUT);
   pinMode(L2_IN, INPUT);
   pinMode(S2_IN, INPUT);
-
+  pinMode(S3_IN, INPUT);
   pinMode(OUT1, OUTPUT);
   pinMode(OUT2, OUTPUT);
-  pinMode(CLKO, OUTPUT);
+  pinMode(OUT3, OUTPUT);
 
-  internalCLK.delayTime = 100;
 }
 
 void loop() {
-
-  updateinternalCLKClock();
+  updateEuclid();
   checkClock();
   checkReset();
   checkShift();
-  updateEuclid();
-  writeOutputs();
   //Inputs have pullup resistors instead of pulldown, thus the trigger conditioning is inverted from e.g.: my Sequencer.
-}
-
-void updateinternalCLKClock() {
-
-  if (internal) {
-    unsigned long currentMillis = millis();
-
-    internalCLK.delayTime = map(analogRead(CLKI_RATE), 0, 1023, minDelay, maxDelay);  // Set the frequency of the internalCLK
-
-    //Write internalCLK Clock state, the output is written in writeOutputs();
-    if (currentMillis - internalCLK.previousMillis >= internalCLK.delayTime) {
-      internalCLK.previousMillis = currentMillis;
-      internalCLK.state = !internalCLK.state;
-      //The state changed, if state is HIGH now that means the clock just had a rising Edge, update the counter.
-      if (internalCLK.state == HIGH) {
-        counter++;
-      }
-    }
-  }
 }
 
 void updateEuclid() {
   //Update parameters
-  length1 = map(analogRead(L1_IN), 0, 1023, 2, 16);
-  length2 = map(analogRead(L2_IN), 0, 1023, 2, 16);
+  length1 = map(analogRead(L1_IN), 0, 1023, 2, 32);
+  length2 = map(analogRead(L2_IN), 0, 1023, 2, 32);
+  //length3 = 16;
   steps1 = map(analogRead(S1_IN), 0, 1023, 1, length1);
   steps2 = map(analogRead(S2_IN), 0, 1023, 1, length2);
+  steps3 = map(analogRead(S3_IN), 0, 1023, 1, length3);
   //Generate first Rhythm
   int bucket1 = 0;
 
@@ -134,6 +105,20 @@ void updateEuclid() {
       rhythm2[i] = 0;
     }
   }
+
+  //Generate the third Rhythm
+int bucket3 = 0;
+
+  for (int i = 0; i < length3; i++) {
+    bucket3 += steps3;
+    if (bucket3 >= length3) {
+      bucket3 -= length3;
+      rhythm3[i] = 1;
+    } else {
+      rhythm3[i] = 0;
+    }
+  }
+  
 }
 
 void checkReset() {
@@ -144,8 +129,6 @@ void checkReset() {
     //Reset the channel assignment and reset the counter
     shift = 0;
     counter = 0;
-    //Activate the internal clock
-    internal = true;
   }
 
   if ((digitalRead(RST) == HIGH) && (RSTtriggerInterrupted == true)) {
@@ -159,23 +142,21 @@ void checkClock() {
   if (CLKtriggered) {
     // External Clock Rising Edge
     CLKtriggerInterrupted = true;
-      // Switching from internal to external clock
-      internal = false;       // Disable the internal clock and the WriteOutputs function.
+
     counter++;
-      //Write the outputs directly after the counter increased, this prevents pulses from firing after the transition from LOW to HIGH on the output.
-      //CLK OUT
-      digitalWrite(CLKO, HIGH);
+      //Write the outputs directly after the counter increased, this prevents pulses from firing after the transition from LOW to HIGH on the output
       // OUT1
       digitalWrite(outputPin1, rhythm1[counter % length1] ? HIGH : LOW);
       // OUT2
       digitalWrite(outputPin2, rhythm2[counter % length2] ? HIGH : LOW);
-    
+      // OUT3
+      digitalWrite(outputPin3, rhythm3[counter % length3] ? HIGH : LOW);
   }
   if ((digitalRead(CLK) == HIGH) && (CLKtriggerInterrupted == true)) {
     // External Clock Falling Edge
     CLKtriggerInterrupted = false; // Reset Clock flag
 
-      digitalWrite(CLKO, LOW);
+      digitalWrite(outputPin3, LOW);
       digitalWrite(outputPin1, LOW);
       digitalWrite(outputPin2, LOW);
   }
@@ -190,35 +171,37 @@ void checkShift() {
   if (SHIFTtriggered) {
     SHIFTtriggerInterrupted = true;
 
-    shift = (shift + 1) % 4;
+    shift = (shift + 1) % 6;
   }
 
-  //Swap the channels 1 and 2, you can add more modes if you want to shift the clock out as well
+  //Swap the channels 
    if (shift == 0) {
     outputPin1 = OUT1;
     outputPin2 = OUT2;
+    outputPin3 = OUT3;
   } else if (shift == 1) {
     outputPin1 = OUT2;
     outputPin2 = OUT1;
-  }
+    outputPin3 = OUT3;
+  } else if (shift == 2) {
+    outputPin1 = OUT2;
+    outputPin2 = OUT3;
+    outputPin3 = OUT1;
+  } else if (shift == 3) {
+    outputPin1 = OUT1;
+    outputPin2 = OUT3;
+    outputPin3 = OUT2;
+  } else if (shift == 4) {
+    outputPin1 = OUT3;
+    outputPin2 = OUT2;
+    outputPin3 = OUT1;
+  } else if (shift == 5) {
+    outputPin1 = OUT3;
+    outputPin2 = OUT1;
+    outputPin3 = OUT2;
+  } 
 
   if ((digitalRead(CLK) == HIGH) && (SHIFTtriggerInterrupted == true)) {
     SHIFTtriggerInterrupted = false;  //Reset Shift flag
   }
-}
-
-void writeOutputs() {
-//Only writes output when the internal clock is active, otherwise the outputs are written in the "CheckClock" function.
-  if (internal) {
-    digitalWrite(CLKO, internalCLK.state);
-    if (internalCLK.state == HIGH) {
-      // OUT1
-      digitalWrite(outputPin1, rhythm1[counter % length1] ? HIGH : LOW);
-      // OUT2
-      digitalWrite(outputPin2, rhythm2[counter % length2] ? HIGH : LOW);
-    } else {
-      digitalWrite(outputPin1, LOW);
-      digitalWrite(outputPin2, LOW);
-    }
-  } 
 }
