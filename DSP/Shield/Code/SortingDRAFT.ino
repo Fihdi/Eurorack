@@ -1,8 +1,9 @@
-
+//This program sorts an array of 20 elements. The numbers in the array represent the musical notes in Hz, so the program can be seen as sorting musical notes.
+//Using an external clock forwards the sorting algorithm.
+//The currently sorted note is played using the tone() function.
 //Outputs
 #define CLKO 2  //Internal Clock Output
 int counter = 0;
-//int array[] = {110,123,146,164,174,196,220,246,261,293,329,349,392,440,494,523,587,659,698,783};
 int array[] = {110,123,146,293,164,174,196,220,246,261,329,349,392,440,494,523,587,659,698,783};
 int length = 20;
 int current = 0;
@@ -58,7 +59,8 @@ void updateInternalClock() {
       gnome();
         tone(CLKO, array[current]/2);
     }else{
-        tone(CLKO, 0);
+      //Uncomment to silence the  
+     //   tone(CLKO, 0);
     } 
   }
 }
