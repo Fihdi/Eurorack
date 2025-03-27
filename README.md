@@ -11,3 +11,7 @@ If you were to build these modules yourself make sure to separate the boards in 
 Most modules have some minor bugs, they are summarised in the "README.md" of each module. Please inspect the Kicad projects before ordering and do not blindly trust the resistor values in the schematics. Its best if you breadboard the schematics and see if it behaves and sounds the way you want.
 
 Open points and Issues that can be applied to the whole project are summarized in "General_Issues.txt"
+
+Update 27.03.2025:
+
+I will gradually update my old modules to not having exposed solder joints on the front. The HP (width of the modules) and circuitry will be the same.
