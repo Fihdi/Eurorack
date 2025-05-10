@@ -12,6 +12,6 @@ Most modules have some minor bugs, they are summarised in the "README.md" of eac
 
 Open points and Issues that can be applied to the whole project are summarized in "General_Issues.txt"
 
-Update 27.03.2025:
+Update 10.05.2025:
 
-I will gradually update my old modules to not having exposed solder joints on the front. The HP (width of the modules) and circuitry will be the same.
+All of the frontplates have been updated and are now free of solder joints. The modules that still have solder joints on the front will be updated with a better version in the future. 
