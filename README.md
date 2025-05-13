@@ -14,4 +14,8 @@ Open points and Issues that can be applied to the whole project are summarized i
 
 Update 10.05.2025:
 
-All of the frontplates have been updated and are now free of solder joints. The modules that still have solder joints on the front will be updated with a better version in the future. 
+The frontplates of:
+
+AXOR, Attenuverter, Bell, Crossfader, Clockdivider, Delay, Drum, Euclid, Fold, Hat, MIDI-INT, Mixer, RandomSource, SimpleSampler, Switch, TRIVCO, VCAR, VCF and Voice 
+
+are now free of solder joints. The modules that still have solder joints on the front will be updated or replaced with a better version in the future. 
