@@ -1,4 +1,4 @@
-#Kick-Drum module in 8hp
+# Kick-Drum module in 8hp
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/main/Kick-Drum/KICK-Front.png)
 
