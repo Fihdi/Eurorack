@@ -1,4 +1,4 @@
-#Voltage Controlled Crossfader in 10hp
+# 10hp Voltage Controlled Crossfader
 
 ![Crossfader](https://raw.githubusercontent.com/Fihdi/Eurorack/main/3360_CrossFader/CROSSFADER-Front.png)
 
