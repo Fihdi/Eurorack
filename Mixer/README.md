@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/Fihdi/Eurorack/main/Mixer/Mixer-Front.png)
+![](https://raw.githubusercontent.com/Fihdi/Eurorack/main/Mixer/Mixer_Front.png)
 
 Simple 4channel mixer for VC and Audio.
 
