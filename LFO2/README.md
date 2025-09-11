@@ -1,4 +1,4 @@
-# Voltage controllable LFO 
+# Voltage controllable LFO/VCO
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/LFO2/LFO2_Front.png)
 
