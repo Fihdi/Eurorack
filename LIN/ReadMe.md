@@ -1,4 +1,4 @@
-#4hp Line Input / VCA 
+# 4hp Line Input / VCA 
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/LIN/LIN-Front.png)
 
