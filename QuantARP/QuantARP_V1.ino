@@ -32,7 +32,7 @@ _________________
 
 #define TRG 9  //TRG Input Pin
 #define CVIN A1   //CV Input Pin
-#define ARP 5   //ARP Input Pin
+#define ARP 0   //ARP Input Pin
 
 #define CVOUT 10   //CV Output Pin
 #define AUD 11  //Audio Output Pin
@@ -61,10 +61,15 @@ TCA9535 TCA(0x20);
 #define LED11 11
 #define LED12 12
 
+#define LEDUP 13
+#define LEDDWN 14
+#define LEDUND 15
+
 int leds[12] = { LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8, LED9, LED10, LED11, LED12 };
 
 int noteInOctave = 0;
 int currentSemitone = 0; //currently played note
+int currentOctave = 0; //currently played octave BASED on CV only (MUST NOT BE increased when the arp is going over 2 octaves)
 int lastquantized = 0;
 
 //It takes (1023/5)*(1/12) = 17.05 bits to change one semitone, thus we can set the hysteresis to 14.
@@ -85,9 +90,10 @@ bool scale[12] = {
   true    // B
 };
 
-int arpScale[24] = {};
+int arpScale[48] = {};
 int arpIndex = 0;      // current position in the arpeggio
-int noteAmount = 0; //Amount of notes in the scales
+int arpNoteAmount = 0; //Amount of notes in the scales
+int arpMode = 1; // 1 = UP 2 Octaves, 2 = DOWN 2 Octaves, 3 = UP and DOWN 2 octaves.
 
 volatile bool TRGInterrupted = false;
 volatile bool TRGtriggered = false;
@@ -133,7 +139,12 @@ void setup() {
     TCA.write1(leds[i], HIGH);
     delay(700);
   }
-  TCA.pinMode1(13, OUTPUT);
+  TCA.pinMode1(LEDUP, OUTPUT);
+  TCA.pinMode1(LEDDWN, OUTPUT);
+  TCA.pinMode1(LEDUND, OUTPUT);
+  TCA.pinMode1(ARP, INPUT);
+
+  buildARPScale();
 }
 
 // Scale: true = note is allowed in the scale
@@ -168,9 +179,11 @@ void loop() {
 checkKeypadTriggered();
 checkInputCVChange();
 checkTRG();
+checkARP();
 outputLeds();
 delay(10);  // Optional smoothing delay
 }
+
 void checkInputCVChange(){
 int raw = analogRead(CVIN);     // 0–1023
   //Only update the CV and AUD if the CV Input(Or offset knob) has changed
@@ -190,7 +203,8 @@ void writeCVandAUD() {
     lastCV = raw;
     //value decreased
     currentSemitone = quantizeToScale(semitone);
-
+    currentOctave = currentSemitone/12;
+    
   int frequency = 440 * pow(2.0, (currentSemitone - 49.0 - 4.0 /*offset for so the base tone is C*/) / 12.0);
   tone(AUD, (int)frequency);
   float quantizedVoltage = currentSemitone / 12.0;
@@ -201,7 +215,7 @@ void writeCVandAUD() {
 }
 
 void outputLeds() {
-
+  //Scale LEDs
   for (int i = 0; i < 12; i++) {
     if (scale[i]) {
       if( (currentSemitone % 12) != i){
@@ -214,6 +228,44 @@ TCA.write1(leds[i], LOW);
     }
     
   }
+  //ARP Mode 
+    if(arpMode==1){
+      //UP 2 Octaves
+      TCA.write1(LEDUP, LOW);
+      TCA.write1(LEDDWN, HIGH);
+      TCA.write1(LEDUND, HIGH);
+}
+if(arpMode==2){
+      //DOWN 2 Octaves
+      TCA.write1(LEDUP, HIGH);
+      TCA.write1(LEDDWN, LOW);
+      TCA.write1(LEDUND, HIGH);
+}
+if(arpMode==3){
+      //UP and DOWN 2 Octaves
+      TCA.write1(LEDUP, HIGH);
+      TCA.write1(LEDDWN, HIGH);
+      TCA.write1(LEDUND, LOW);
+}
+if(arpMode==4){
+      //UP 1 Octave
+      TCA.write1(LEDUP, HIGH);
+      TCA.write1(LEDDWN, LOW);
+      TCA.write1(LEDUND, LOW);
+}
+if(arpMode==5){
+      //DOWN 1 Octave
+      TCA.write1(LEDUP, LOW);
+      TCA.write1(LEDDWN, HIGH);
+      TCA.write1(LEDUND, LOW);
+}
+if(arpMode==0){
+      //UP and DOWN Octave
+      TCA.write1(LEDUP, LOW);
+      TCA.write1(LEDDWN, LOW);
+      TCA.write1(LEDUND, HIGH);
+}
+
 }
 
 
@@ -299,7 +351,8 @@ void checkKeypadTriggered() {
     if(countNotes() == 0){
       scale[keypad-1] = !scale[keypad-1];  //Undo the Inverting if it resulted in all of the notes being off.
     }
-    
+        buildARPScale();
+
   }
 
   if ((keypad == 13) && (keypadInterrupted == true)) {
@@ -307,7 +360,22 @@ void checkKeypadTriggered() {
   }
 }
 
-void readARP() {
+void checkARP() {
+ARPtriggered = (TCA.read1(ARP) == LOW) && (ARPInterrupted == false);
+
+if(ARPtriggered){
+ARPInterrupted = true;
+
+arpMode = (arpMode+1) % 6;
+buildARPScale();
+outputLeds();
+}
+
+
+if ((digitalRead(ARP) == HIGH) && (ARPInterrupted == true)) {
+    ARPInterrupted = false;  //Reset trigger flag
+  }
+
 }
 
 //Count the number of active keys in the scale
@@ -328,12 +396,38 @@ void checkTRG() {
   if (TRGtriggered) {
     //Triggered!
     TRGInterrupted = true;
-    
-    buildARPScale();
 
-    int currentOctave = currentSemitone/12;
-
-    arpIndex = (arpIndex + 1) % noteAmount; //Increase/Cycle the index for the amount of notes in the scale
+    if(arpMode==1){
+      //UP 2 Octaves
+      Serial.println(arpIndex);
+      Serial.println(arpNoteAmount);
+      arpIndex = (arpIndex + 1) % (arpNoteAmount*2); //Increase/Cycle the index for the amount of notes in the scale
+    }
+    if(arpMode==2){
+      //DOWN 2 Octaves
+      arpIndex++;
+      arpIndex = arpIndex % (arpNoteAmount*2); //Increase/Cycle the index for the amount of notes in the scale
+    }
+      if(arpMode==3){
+      //UP AND DOWN 2 Octaves
+      arpIndex++;
+      arpIndex = arpIndex % ((arpNoteAmount*4)-2); //Increase/Cycle the index for the amount of notes in the scale
+    }
+    if(arpMode==4){
+      //UP 1 Octaves
+      arpIndex++;
+      arpIndex = arpIndex % ((arpNoteAmount)); //Increase/Cycle the index for the amount of notes in the scale
+    }
+    if(arpMode==5){
+      // DOWN 1 Octaves
+      arpIndex++;
+      arpIndex = arpIndex % ((arpNoteAmount)); //Increase/Cycle the index for the amount of notes in the scale
+    }
+    if(arpMode==0){
+      //UP AND DOWN  1 Octaves
+      arpIndex++;
+      arpIndex = arpIndex % ((arpNoteAmount*2)-2); //Increase/Cycle the index for the amount of notes in the scale
+    }
     
     currentSemitone = currentOctave*12 + arpScale[arpIndex];
     //OUTPUT CV and AUDIO
@@ -353,15 +447,111 @@ void checkTRG() {
 }
 
 void buildARPScale(){
-
 //Builds an array of "offsets" used for the Arpeggiator
-//Example: the indexes for C major are (starting at 0): 0, 2, 4, 5, 7, 9, 11,
+//Example: the indexes for C major are (starting at 0): 0, 2, 4, 5, 7, 9, 11 for the first octave and 12, 14, 16, 17, 19, 21, 23 for the second octave(add 12 to every value).
 //Using this array, we jump to the first note in the scale in the active octave and then output: currentoctave + offset
-noteAmount = 0;
+arpNoteAmount = 0;
+if(arpMode == 1){
+  //Mode UP 2 Octaves
 for (int i = 0; i < 12; i++) {
   if(scale[i]){
-    arpScale[noteAmount] = i;
-    noteAmount++;
+    arpScale[arpNoteAmount] = i;
+    arpNoteAmount++;
   }
 }
+for (int i = 0; i < arpNoteAmount; i++) {
+    arpScale[i+arpNoteAmount] = arpScale[i] +12;
+}
+
+}
+if(arpMode == 2){
+  int temp;
+  //Mode DOWN 2 Octaves
+  //Same as UP 2 Octaves with a flipped array.
+for (int i = 0; i < 12; i++) {
+  if(scale[i]){
+    arpScale[arpNoteAmount] = i;
+    arpNoteAmount++;
+  }
+}
+for (int i = 0; i < arpNoteAmount; i++) {
+    arpScale[i+arpNoteAmount] = arpScale[i] +12;
+}
+
+//Flip
+for (int i = 0; i < arpNoteAmount; i++) {
+  temp = arpScale[i];
+  arpScale[i] = arpScale[arpNoteAmount*2 - 1 - i];
+  arpScale[arpNoteAmount*2 - 1 - i] = temp;
+}
+}
+if(arpMode == 3){
+ //Mode UP and DOWN 2 Octaves
+
+ //Build the same array as in UP 2 Octaves
+for (int i = 0; i < 12; i++) {
+  if(scale[i]){
+    arpScale[arpNoteAmount] = i;
+    arpNoteAmount++;
+  }
+}
+for (int i = 0; i < arpNoteAmount; i++) {
+    arpScale[i+arpNoteAmount] = arpScale[i] +12;
+}
+//Attach the DOWN parts
+for (int i = 0; i < arpNoteAmount*2; i++) {
+    arpScale[arpNoteAmount*2 + i] = arpScale[arpNoteAmount*2 - 2 - i];
+}
+}
+if(arpMode == 4){
+ //Mode UP 1 Octaves
+ for (int i = 0; i < 12; i++) {
+  if(scale[i]){
+    arpScale[arpNoteAmount] = i;
+    arpNoteAmount++;
+  }
+}
+}
+if(arpMode == 5){
+ //Mode DOWN 1 Octaves
+ int temp;
+  //Mode DOWN 2 Octaves
+  //Same as UP 2 Octaves with a flipped array.
+for (int i = 0; i < 12; i++) {
+  if(scale[i]){
+    arpScale[arpNoteAmount] = i;
+    arpNoteAmount++;
+  }
+}
+//Flip
+for (int i = 0; i < arpNoteAmount / 2; i++) {
+    int temp = arpScale[i];
+    arpScale[i] = arpScale[arpNoteAmount - 1 - i];
+    arpScale[arpNoteAmount - 1 - i] = temp;
+  }
+}
+if(arpMode == 0){
+ //Mode UP and DOWN 1 Octaves
+arpNoteAmount = 0;
+int temp;
+//UP AND DOWN 1 oct
+for (int i = 0; i < 12; i++) {
+  if(scale[i]){
+    arpScale[arpNoteAmount] = i;
+    arpNoteAmount++;
+  }
+}
+//Attach the DOWN parts
+for (int i = 0; i < arpNoteAmount; i++) {
+    arpScale[arpNoteAmount + i] = arpScale[arpNoteAmount -2 - i];
+}
+
+}
+/*Helper loop for debugging
+Serial.println(arpNoteAmount);
+for (int i = 0; i < 48; i++) {
+  Serial.print(arpScale[i]);
+  Serial.print(", ");
+}
+*/
 }
