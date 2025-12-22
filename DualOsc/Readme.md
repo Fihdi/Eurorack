@@ -2,7 +2,7 @@
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/DualOsc/DualOsc-Front.png)
 
-Two triangle core VCOs with volt per octave tracking, FM, Synchronization and PWM. Both VCOs are identical and can be used independantely. The middle section allows for modulation from the left VCO to the right VCO and can switched on or off via switches. The strength of this modulation is controlable via the AMT knob and a control voltage and is indicated by the arrow LED. Four trimmers at the back of the mainboard are used to tune the volt per octave response and the sine shaper. 
+Two triangle core VCOs with volt per octave tracking, FM, Synchronization and PWM. Both VCOs are identical and can be used independantely. The middle section allows for modulation (AM, FM and synchronization) from the left VCO to the right VCO and can be switched on or off via switches. The strength of this modulation is controllable via the AMT knob and a control voltage and is indicated by the arrow LED. Four trimmers at the back of the mainboard are used to tune the volt per octave responses and the sine shapers. 
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/DualOsc/DualOsc-IRL.jpeg)
 
