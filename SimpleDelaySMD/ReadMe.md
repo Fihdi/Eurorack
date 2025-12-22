@@ -4,7 +4,7 @@
 
 This module is based on the famous PT2399 delay IC and uses an Arduino Nano to control its delay time. The Arduino controls the delay time by RC-filtering its PWM output and sending that signal to an NPN current sink. For the feedback, the VCO output of the PT2399 goes to a high speed binary counter, divided by 2048 and fed back to the Arduino Nano for evaluation.
 
-If the VCO frequency is higher than the target frequency, the duty cycle of the PWM output is decreased, and increased if the VCO frequency is lower than the target.
+If the VCO frequency is higher than the target frequency, the duty cycle of the PWM signal is decreased, and increased if the VCO frequency is lower than the target.
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/SimpleDelaySMD/TimesFrequencyTable.png)
 
