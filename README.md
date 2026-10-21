@@ -17,6 +17,6 @@ The following modules are being re-worked and can be found in their own reposito
 * 10hp Digital FX: [DSPFX](https://github.com/Fihdi/DSP-FX32)
 * 8hp Four stage Phaser: [QPOL](https://github.com/Fihdi/QPOL)
 * 10hp FM-Radio: [ATS20](https://github.com/Fihdi/ATS-20-Eurorack)
-* 4hp Headphone/Line-Input: [LIN](https://github.com/Fihdi/LIN
+* 4hp Headphone/Line-Input: [LIN](https://github.com/Fihdi/LIN)
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/EurorackSetup.jpeg)
