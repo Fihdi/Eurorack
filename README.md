@@ -12,5 +12,9 @@ The following modules are being re-worked and can be found in their own reposito
 * 8hp Voltage Controlled Attack/Release and Slew Rate limiter: [VCAR](https://github.com/Fihdi/VCAR)
 * 8hp VCO/LFO: [UNO](https://github.com/Fihdi/UNO)
 * 6hp S&H and Random Voltage/Gate generator: [DICE](https://github.com/Fihdi/DICE)
+* 6hp Wavefolder: [MWMWM](https://github.com/Fihdi/MWMWM)
+* 10hp Digital FX: [DSPFX](https://github.com/Fihdi/DSP-FX32)
+* 8hp Four stage Phaser: [QPOL](https://github.com/Fihdi/QPOL)
+* 10hp FM-Radio: [ATS20](https://github.com/Fihdi/ATS-20-Eurorack)
 
 ![](https://raw.githubusercontent.com/Fihdi/Eurorack/refs/heads/main/EurorackSetup.jpeg)
